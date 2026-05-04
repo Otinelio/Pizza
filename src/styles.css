@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: #0D0D0D;
+  --color-surface: #1A1A1A;
+  --color-footer: #080808;
+  --color-fire: #FF4D1C;
+  --color-fire-dark: #E03A0D;
+  --color-smoke: #F8F8F8;
+  --color-cream: #F0DEB4;
+
+  --font-display: "Syne", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+}
+
+/* ── Base ───────────────────────────── */
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-smoke);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+}
+::selection { background: #FF4D1C; color: #0D0D0D; }
+
+h1, h2, h3, h4 { font-family: var(--font-display); }
+
+/* ── Animations ─────────────────────── */
+
+/* Ticker marquee horizontal infini */
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.marquee-track { animation: marquee 40s linear infinite; }
+
+/* Lettres du hero qui tombent une par une */
+@keyframes lettersDrop { 0%{transform:translateY(100%)} 100%{transform:translateY(0)} }
+.letter-mask { display:inline-block; overflow:hidden; vertical-align:bottom; }
+.letter-inner { display:inline-block; transform:translateY(100%); animation: lettersDrop 600ms cubic-bezier(0.16,1,0.3,1) forwards; }
+
+/* Scroll reveal */
+.reveal { opacity:0; transform:translateY(24px); transition: opacity 500ms cubic-bezier(0.16,1,0.3,1), transform 500ms cubic-bezier(0.16,1,0.3,1); }
+.reveal.in { opacity:1; transform:translateY(0); }
+
+/* Flèche scroll bobbing */
+@keyframes arrowBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+.arrow-bob { animation: arrowBob 1.5s ease-in-out infinite; }
+
+/* Cart badge pop spring */
+@keyframes badgePop { 0%{transform:scale(0.5)} 60%{transform:scale(1.3)} 100%{transform:scale(1)} }
+.badge-pop { animation: badgePop 400ms ease; }
+
+/* Loader d'intro 1.5s puis fade out */
+@keyframes loaderUp { from{transform:translateY(20px); opacity:0} to{transform:translateY(0); opacity:1} }
+@keyframes loaderLine { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+@keyframes loaderOut { to{opacity:0; visibility:hidden} }
+.loader-screen { animation: loaderOut 500ms ease-in 1500ms forwards; }
+.loader-mr     { animation: loaderUp 400ms cubic-bezier(0.16,1,0.3,1) 200ms both; }
+.loader-pizza  { animation: loaderUp 400ms cubic-bezier(0.16,1,0.3,1) 600ms both; }
+.loader-line   { transform-origin:left; transform:scaleX(0); animation: loaderLine 300ms ease-out 1100ms forwards; }
+
+/* Drawer panier (right desktop, bottom mobile) */
+@keyframes drawerInRight  { from{transform:translateX(100%)} to{transform:translateX(0)} }
+@keyframes drawerInBottom { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.drawer-right  { animation: drawerInRight 350ms cubic-bezier(0.16,1,0.3,1); }
+.drawer-bottom { animation: drawerInBottom 380ms cubic-bezier(0.32,0.72,0,1); }
+
+/* Modal */
+@keyframes modalIn { from{opacity:0; transform:scale(0.95)} to{opacity:1; transform:scale(1)} }
+.modal-in { animation: modalIn 300ms ease-out; }
+
+/* Press feedback */
+.press:active { transform: scale(0.97); transition: transform 100ms ease-out; }
+
+/* Photo treatment */
+.photo { filter: saturate(1.15) contrast(1.08); }
+.photo-wrap { position:relative; overflow:hidden; }
+.photo-wrap::after {
+  content:''; position:absolute; inset:0; pointer-events:none; opacity:0.04; mix-blend-mode:overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Kitchen pulse */
+@keyframes kpulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,77,28,0.4)} 50%{box-shadow:0 0 0 8px rgba(255,77,28,0)} }
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
