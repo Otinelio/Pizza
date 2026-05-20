@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowDown, MessageCircle } from "lucide-react";
 import { getRestaurantData, formatFCFA } from "@/lib/data";
@@ -42,8 +42,19 @@ function AnimatedTitle({ text }: { text: string }) {
 }
 
 export default function HomePage() {
-  const data = getRestaurantData();
-  const signatures = useMemo(() => data.items.filter((i) => i.category === "PIZZAS").slice(0, 3), [data]);
+  const [data, setData] = useState(getRestaurantData);
+
+  useEffect(() => {
+    import("@/lib/data").then(m => {
+      m.fetchRestaurantData().then(d => setData(d));
+    });
+    
+    const handler = () => setData(getRestaurantData());
+    window.addEventListener("mrpizza_data_changed", handler);
+    return () => window.removeEventListener("mrpizza_data_changed", handler);
+  }, []);
+
+  const signatures = useMemo(() => data.items.filter((i: any) => i.category === "PIZZAS").slice(0, 3), [data]);
 
   return (
     <div>
@@ -190,7 +201,7 @@ export default function HomePage() {
             gap: 24,
           }}
         >
-          {signatures.map((item, i) => (
+          {signatures.map((item: any, i: number) => (
             <Reveal key={item.id}>
               <div
                 style={{

@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CartProvider } from "@/lib/cart";
-import { getRestaurantData } from "@/lib/data";
+import { getRestaurantData, initSupabaseData } from "@/lib/data";
 import Loader from "@/components/site/Loader";
 import Ticker from "@/components/site/Ticker";
 import Navbar from "@/components/site/Navbar";
@@ -52,6 +52,11 @@ function AppShell() {
   const isAdmin = pathname.startsWith("/admin");
   const isKitchen = pathname.startsWith("/kitchen");
   const isScan = pathname.startsWith("/menu/scan");
+
+  useEffect(() => {
+    // Initialiser les données Supabase avec les données par défaut si la base est vide
+    initSupabaseData();
+  }, []);
 
   // Admin and Kitchen get no public chrome at all
   if (isAdmin || isKitchen) {

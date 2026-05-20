@@ -1,8 +1,19 @@
 import { Instagram, Facebook } from "lucide-react";
+import { useState, useEffect } from "react";
 import { getRestaurantData } from "@/lib/data";
 
 export default function Footer() {
-  const data = getRestaurantData();
+  const [data, setData] = useState(getRestaurantData);
+
+  useEffect(() => {
+    import("@/lib/data").then(m => {
+      m.fetchRestaurantData().then(d => setData(d));
+    });
+    
+    const handler = () => setData(getRestaurantData());
+    window.addEventListener("mrpizza_data_changed", handler);
+    return () => window.removeEventListener("mrpizza_data_changed", handler);
+  }, []);
 
   return (
     <footer

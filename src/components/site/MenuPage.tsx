@@ -68,20 +68,25 @@ function OrderStatusTracker() {
 }
 
 export default function MenuPage({ scanMode = false, initialTable }: MenuPageProps) {
-  const data = getRestaurantData();
+  const [data, setData] = useState(getRestaurantData);
   const cart = useCart();
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [tableNumber, setTableNumber] = useState<number | null>(initialTable ?? null);
   const [showTableModal, setShowTableModal] = useState(scanMode && !initialTable);
   const [tableInput, setTableInput] = useState("");
 
-  // Listen for data changes
-  const [, setTick] = useState(0);
+  // Listen for data changes and fetch initial async
   useEffect(() => {
     if (initialTable) {
       localStorage.setItem("mrpizza_table", String(initialTable));
     }
-    const handler = () => setTick((t) => t + 1);
+    
+    // Fetch async from Supabase
+    import("@/lib/data").then(m => {
+      m.fetchRestaurantData().then(d => setData(d));
+    });
+
+    const handler = () => setData(getRestaurantData());
     window.addEventListener("mrpizza_data_changed", handler);
     return () => window.removeEventListener("mrpizza_data_changed", handler);
   }, [initialTable]);

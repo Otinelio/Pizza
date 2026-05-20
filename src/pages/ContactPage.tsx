@@ -1,9 +1,20 @@
 import { MapPin, Phone, Clock, Instagram, Facebook, MessageCircle, Navigation } from "lucide-react";
+import { useState, useEffect } from "react";
 import { getRestaurantData } from "@/lib/data";
 import Reveal from "@/components/site/Reveal";
 
 export default function ContactPage() {
-  const data = getRestaurantData();
+  const [data, setData] = useState(getRestaurantData);
+
+  useEffect(() => {
+    import("@/lib/data").then(m => {
+      m.fetchRestaurantData().then(d => setData(d));
+    });
+    
+    const handler = () => setData(getRestaurantData());
+    window.addEventListener("mrpizza_data_changed", handler);
+    return () => window.removeEventListener("mrpizza_data_changed", handler);
+  }, []);
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
       <section style={{ padding: "100px 32px 60px", textAlign: "center" }}>
