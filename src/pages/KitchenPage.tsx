@@ -37,6 +37,13 @@ function KitchenDashboard({ onLogout }: { onLogout: () => void }) {
   const [dragId, setDragId] = useState<string | null>(null);
   const [, setTick] = useState(0);
 
+  // Fetch menu data from Supabase for NewOrderModal
+  useEffect(() => {
+    import("@/lib/data").then(m => {
+      m.fetchRestaurantData();
+    });
+  }, []);
+
   // Poll for new orders from localStorage
   useEffect(() => {
     const iv = setInterval(() => {

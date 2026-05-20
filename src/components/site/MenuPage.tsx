@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Clock, ChefHat, CheckCircle2 } from "lucide-react";
+import { Plus, Clock, ChefHat, CheckCircle2, Search, X } from "lucide-react";
 import { getRestaurantData, formatFCFA, type MenuItem, getOrders, type KitchenOrder } from "@/lib/data";
 import { useCart } from "@/lib/cart";
 
@@ -74,6 +74,8 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
   const [tableNumber, setTableNumber] = useState<number | null>(initialTable ?? null);
   const [showTableModal, setShowTableModal] = useState(scanMode && !initialTable);
   const [tableInput, setTableInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
 
   // Listen for data changes and fetch initial async
   useEffect(() => {
@@ -91,8 +93,10 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
     return () => window.removeEventListener("mrpizza_data_changed", handler);
   }, [initialTable]);
 
-  const filtered =
-    activeCategory === "ALL" ? data.items : data.items.filter((i) => i.category === activeCategory);
+  const filtered = data.items.filter((i) => 
+    (activeCategory === "ALL" || i.category === activeCategory) &&
+    i.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleAdd = (item: MenuItem) => {
     if (!item.available) return;
@@ -242,16 +246,16 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
       >
         {scanMode && <OrderStatusTracker />}
         
-        {/* Category Filters */}
-        <div
-          style={{
-            display: "flex",
-            gap: 8,
-            padding: "16px 32px",
-            overflowX: "auto",
-            scrollbarWidth: "none",
-          }}
-        >
+        {/* Category Filters & Search */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, padding: "16px 32px" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              overflowX: "auto",
+              scrollbarWidth: "none",
+            }}
+          >
         {["ALL", ...data.categories].map((cat) => (
           <button
             key={cat}
@@ -278,7 +282,12 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
             {cat === "ALL" ? "Tout" : cat}
           </button>
         ))}
-      </div>
+          </div>
+          <div style={{ position: "relative" }}>
+             <Search size={18} style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "var(--color-cream)", opacity: 0.5 }} />
+             <input type="search" placeholder="Rechercher un plat..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ width: "100%", height: 44, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 14, padding: "0 16px 0 44px", outline: "none", boxSizing: "border-box" }} />
+          </div>
+        </div>
       </div>
 
       {/* Items Grid */}
@@ -295,6 +304,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
         {filtered.map((item) => (
           <div
             key={item.id}
+            onClick={() => setSelectedItem(item)}
             style={{
               background: "var(--color-surface)",
               borderRadius: "var(--radius-md)",
@@ -302,6 +312,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
               opacity: item.available ? 1 : 0.5,
               transition: "transform 300ms, box-shadow 300ms",
               position: "relative",
+              cursor: "pointer",
             }}
             onMouseEnter={(e) => {
               if (item.available) {
@@ -339,13 +350,19 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
 
             {/* Photo */}
             <div className="photo-wrap" style={{ height: 180 }}>
-              <img
-                src={item.image}
-                alt={item.name}
-                className="photo"
-                loading="lazy"
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              />
+              {item.image ? (
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="photo"
+                  loading="lazy"
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                />
+              ) : (
+                <div style={{ width: "100%", height: "100%", background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                   <ChefHat size={32} style={{ color: "var(--color-cream)", opacity: 0.3 }} />
+                </div>
+              )}
             </div>
 
             {/* Info */}
@@ -387,7 +404,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                   {formatFCFA(item.price)}
                 </span>
                 <button
-                  onClick={() => handleAdd(item)}
+                  onClick={(e) => { e.stopPropagation(); handleAdd(item); }}
                   disabled={!item.available}
                   className="press"
                   style={{
@@ -422,6 +439,39 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
           </div>
         ))}
       </div>
+
+      {/* Item Info Modal */}
+      {selectedItem && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 500, background: "rgba(0,0,0,0.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }} onClick={() => setSelectedItem(null)}>
+          <div className="modal-in" onClick={(e) => e.stopPropagation()} style={{ background: "var(--color-surface)", borderRadius: "var(--radius-md)", width: "100%", maxWidth: 400, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+            <div style={{ position: "relative", height: 240, background: "rgba(255,255,255,0.05)" }}>
+              {selectedItem.image ? (
+                <img src={selectedItem.image} alt={selectedItem.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              ) : (
+                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><ChefHat size={48} style={{ color: "var(--color-cream)", opacity: 0.3 }} /></div>
+              )}
+              <button onClick={() => setSelectedItem(null)} style={{ position: "absolute", top: 16, right: 16, background: "rgba(0,0,0,0.5)", border: "none", color: "white", width: 32, height: 32, borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", backdropFilter: "blur(4px)" }}><X size={18} /></button>
+            </div>
+            <div style={{ padding: 24 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+                <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 20, color: "var(--color-smoke)", margin: 0, textTransform: "uppercase" }}>{selectedItem.name}</h3>
+                <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18, color: "var(--color-fire)", whiteSpace: "nowrap", marginLeft: 16 }}>{formatFCFA(selectedItem.price)}</span>
+              </div>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--color-cream)", opacity: 0.7, lineHeight: 1.5, margin: "0 0 24px" }}>
+                {selectedItem.description || "Aucune description disponible pour ce produit."}
+              </p>
+              <button
+                onClick={() => { handleAdd(selectedItem); setSelectedItem(null); }}
+                disabled={!selectedItem.available}
+                className="press"
+                style={{ width: "100%", height: 48, background: selectedItem.available ? "var(--color-fire)" : "rgba(255,255,255,0.1)", color: selectedItem.available ? "#0D0D0D" : "var(--color-smoke)", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 14, textTransform: "uppercase", letterSpacing: "0.05em", cursor: selectedItem.available ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+              >
+                <Plus size={18} /> {selectedItem.available ? "Ajouter à ma commande" : "Indisponible actuellement"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

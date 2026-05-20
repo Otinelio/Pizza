@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { LogOut, LayoutDashboard, ChefHat, Info, QrCode, ToggleLeft, ToggleRight, Plus, Pencil, Trash2, X, Image as ImageIcon, Loader2 } from "lucide-react";
+import { LogOut, LayoutDashboard, ChefHat, Info, QrCode, ToggleLeft, ToggleRight, Plus, Pencil, Trash2, X, Image as ImageIcon, Loader2, List, Search } from "lucide-react";
 import { ADMIN_PASSWORD, getRestaurantData, saveRestaurantData, formatFCFA, type RestaurantData, type MenuItem, addMenuItem, updateMenuItem, deleteMenuItem, toggleItemAvailability } from "@/lib/data";
-import { uploadMenuImage, isSupabaseConfigured } from "@/lib/supabase";
+import { uploadMenuImage, deleteMenuImage, isSupabaseConfigured } from "@/lib/supabase";
 
 export default function AdminPage() {
   const [auth, setAuth] = useState(false);
@@ -29,6 +29,7 @@ export default function AdminPage() {
 const tabs = [
   { id: "dashboard", label: "Tableau de bord", icon: LayoutDashboard },
   { id: "cuisine", label: "Cuisine", icon: ChefHat },
+  { id: "categories", label: "Catégories", icon: List },
   { id: "infos", label: "Infos restaurant", icon: Info },
   { id: "qr", label: "Tables QR", icon: QrCode },
   { id: "status", label: "Statut", icon: ToggleLeft },
@@ -37,7 +38,14 @@ const tabs = [
 function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [tab, setTab] = useState("dashboard");
   const [data, setData] = useState(getRestaurantData);
-  useEffect(() => { const h = () => setData(getRestaurantData()); window.addEventListener("mrpizza_data_changed", h); return () => window.removeEventListener("mrpizza_data_changed", h); }, []);
+  useEffect(() => {
+    import("@/lib/data").then(m => {
+      m.fetchRestaurantData().then(d => setData(d));
+    });
+    const h = () => setData(getRestaurantData());
+    window.addEventListener("mrpizza_data_changed", h);
+    return () => window.removeEventListener("mrpizza_data_changed", h);
+  }, []);
   const save = (d: RestaurantData) => { saveRestaurantData(d); setData(d); };
 
   return (
@@ -72,6 +80,7 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
         )}
         {tab === "dashboard" && <TabDashboard data={data} />}
         {tab === "cuisine" && <TabCuisine data={data} />}
+        {tab === "categories" && <TabCategories data={data} save={save} />}
         {tab === "infos" && <TabInfos data={data} save={save} />}
         {tab === "qr" && <TabQR />}
         {tab === "status" && <TabStatus data={data} save={save} />}
@@ -102,10 +111,57 @@ function TabDashboard({ data }: { data: RestaurantData }) {
   );
 }
 
+function TabCategories({ data, save }: { data: RestaurantData; save: (d: RestaurantData) => void }) {
+  const [newCat, setNewCat] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const addCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCat.trim()) return;
+    setLoading(true);
+    await save({ ...data, categories: [...data.categories, newCat.trim()] });
+    setNewCat("");
+    setLoading(false);
+  };
+
+  const deleteCategory = async (cat: string) => {
+    if (confirm(`Voulez-vous vraiment supprimer la catégorie "${cat}" ?`)) {
+      setLoading(true);
+      await save({ ...data, categories: data.categories.filter(c => c !== cat) });
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.5rem", color: "var(--color-smoke)", margin: "0 0 32px", textTransform: "uppercase" }}>Gestion des Catégories</h2>
+      
+      <form onSubmit={addCategory} style={{ display: "flex", gap: 12, marginBottom: 32, maxWidth: 400 }}>
+        <input required type="text" value={newCat} onChange={(e) => setNewCat(e.target.value)} disabled={loading} placeholder="Nouvelle catégorie" style={{ flex: 1, height: 40, background: "var(--color-surface)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 13, padding: "0 12px", outline: "none" }} />
+        <button type="submit" disabled={loading} className="press" style={{ height: 40, padding: "0 20px", background: "var(--color-fire)", color: "#0D0D0D", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: loading ? "wait" : "pointer" }}>Ajouter</button>
+      </form>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 400 }}>
+        {data.categories.map((cat, i) => (
+          <div key={`${cat}-${i}`} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", background: "var(--color-surface)", borderRadius: "var(--radius-sm)" }}>
+            <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14, color: "var(--color-smoke)" }}>{cat}</span>
+            <button disabled={loading} onClick={() => deleteCategory(cat)} style={{ background: "none", border: "none", color: "#ef4444", cursor: loading ? "wait" : "pointer", opacity: 0.8 }}><Trash2 size={16} /></button>
+          </div>
+        ))}
+        {data.categories.length === 0 && (
+          <p style={{ color: "var(--color-cream)", opacity: 0.6, fontSize: 13 }}>Aucune catégorie.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function TabCuisine({ data }: { data: RestaurantData }) {
   const [editItem, setEditItem] = useState<MenuItem | null>(null);
   const [showAdd, setShowAdd] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchExpanded, setSearchExpanded] = useState(false);
 
   const toggleAvail = async (id: string, current: boolean) => {
     setIsProcessing(true);
@@ -125,15 +181,17 @@ function TabCuisine({ data }: { data: RestaurantData }) {
     setIsProcessing(true);
     try {
       let imageUrl = item.image;
+      const exists = data.items.find(i => i.id === item.id);
 
-      // Si un fichier est fourni et Supabase est configuré, on l'upload
       if (file && isSupabaseConfigured()) {
         imageUrl = await uploadMenuImage(file, item.id);
+      } else if (!imageUrl && exists?.image && isSupabaseConfigured()) {
+        // L'utilisateur a supprimé l'image
+        await deleteMenuImage(exists.image);
       }
 
       const finalItem = { ...item, image: imageUrl };
 
-      const exists = data.items.find(i => i.id === item.id);
       if (exists) {
         await updateMenuItem(finalItem);
       } else {
@@ -150,12 +208,31 @@ function TabCuisine({ data }: { data: RestaurantData }) {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
-        <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.5rem", color: "var(--color-smoke)", margin: 0, textTransform: "uppercase" }}>Gestion de la cuisine</h2>
-        <button disabled={isProcessing} onClick={() => { setEditItem({ id: `item-${Date.now()}`, name: "", description: "", price: 0, category: data.categories[0], image: "", available: true }); setShowAdd(true); }} className="press" style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 20px", background: "var(--color-fire)", color: "#0D0D0D", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: isProcessing ? "wait" : "pointer", opacity: isProcessing ? 0.7 : 1 }}><Plus size={14} /> Ajouter un plat</button>
+      <div style={{ position: "sticky", top: -32, zIndex: 10, background: "#0D0D0D", padding: "32px 0 16px", margin: "-32px 0 32px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.5rem", color: "var(--color-smoke)", margin: 0, textTransform: "uppercase" }}>Gestion de la cuisine</h2>
+          <button disabled={isProcessing} onClick={() => { setEditItem({ id: `item-${Date.now()}`, name: "", description: "", price: 0, category: data.categories[0], image: "", available: true }); setShowAdd(true); }} className="press" style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 20px", background: "var(--color-fire)", color: "#0D0D0D", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: isProcessing ? "wait" : "pointer", opacity: isProcessing ? 0.7 : 1, whiteSpace: "nowrap" }}><Plus size={14} /> Ajouter un plat</button>
+        </div>
+        
+        <div style={{ display: "flex", alignItems: "center", background: "var(--color-surface)", borderRadius: "var(--radius-sm)", border: "1px solid rgba(255,255,255,0.1)", overflow: "hidden", width: searchExpanded ? "100%" : 44, maxWidth: 400, transition: "width 300ms ease-in-out" }}>
+          <button onClick={() => setSearchExpanded(!searchExpanded)} style={{ background: "none", border: "none", color: "var(--color-cream)", width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+            <Search size={18} />
+          </button>
+          <input 
+            type="search" 
+            placeholder="Rechercher un plat..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ width: "100%", height: 44, background: "transparent", border: "none", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 14, outline: "none", paddingRight: 12, opacity: searchExpanded ? 1 : 0, transition: "opacity 300ms ease-in-out" }} 
+          />
+        </div>
       </div>
+
       {data.categories.map(cat => {
-        const items = data.items.filter(i => i.category === cat);
+        const items = data.items.filter(i => 
+          i.category === cat && 
+          i.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
         if (!items.length) return null;
         return (
           <div key={cat} style={{ marginBottom: 32 }}>
@@ -216,7 +293,12 @@ function ItemModal({ item, categories, onSave, onClose }: { item: MenuItem; cate
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {/* Image Upload Area */}
           <div>
-            <label style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--color-cream)", opacity: 0.6, marginBottom: 8, display: "block" }}>Image du plat</label>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <label style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--color-cream)", opacity: 0.6, display: "block" }}>Image du plat</label>
+              {preview && (
+                <button type="button" onClick={() => { setPreview(""); setFile(null); setForm({ ...form, image: "" }); }} style={{ background: "none", border: "none", color: "#ef4444", fontSize: 11, fontFamily: "var(--font-display)", fontWeight: 700, textTransform: "uppercase", cursor: "pointer", opacity: 0.8 }}>Supprimer</button>
+              )}
+            </div>
             <div style={{ position: "relative", width: "100%", height: 160, background: "var(--color-bg)", borderRadius: "var(--radius-sm)", border: "1px dashed rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", cursor: "pointer" }}>
               {preview ? (
                 <img src={preview} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />

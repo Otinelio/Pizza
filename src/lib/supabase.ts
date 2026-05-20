@@ -12,8 +12,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 export function isSupabaseConfigured(): boolean {
   return !!(
     SUPABASE_URL &&
-    SUPABASE_ANON_KEY &&
-    SUPABASE_URL !== "https://xbgwhhrsycldwcsctbyd.supabase.co"
+    SUPABASE_ANON_KEY
   );
 }
 
