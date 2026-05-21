@@ -18,7 +18,7 @@ export default function Navbar() {
         top: "32px",
         zIndex: 90,
         background: "var(--color-bg)",
-        padding: "20px 32px",
+        padding: "12px 32px",
         alignItems: "center",
         justifyContent: "space-between",
         borderBottom: "1px solid rgba(255,255,255,0.05)",
@@ -27,15 +27,20 @@ export default function Navbar() {
       <Link
         to="/"
         style={{
-          fontFamily: "var(--font-display)",
-          fontWeight: 800,
-          fontSize: "1.25rem",
-          color: "var(--color-smoke)",
+          display: "flex",
+          alignItems: "center",
           textDecoration: "none",
-          letterSpacing: "-0.02em",
         }}
       >
-        MR. PIZZA
+        <img 
+          src="/src/lib/images/logopizza.png" 
+          alt="Mr. Pizza" 
+          style={{
+            height: "70px",
+            width: "auto",
+            maxHeight: "70px",
+          }}
+        />
       </Link>
 
       <div style={{ display: "flex", gap: "32px", alignItems: "center" }}>

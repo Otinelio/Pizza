@@ -13,8 +13,16 @@ export default function AdminPage() {
     return (
       <div style={{ minHeight: "100vh", background: "#0D0D0D", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
         <form onSubmit={(e) => { e.preventDefault(); if (pw.trim() === ADMIN_PASSWORD) { setAuth(true); setErr(""); } else { setErr("Mot de passe incorrect"); } }} style={{ width: "100%", maxWidth: 360, textAlign: "center" }}>
+          <img 
+            src="/src/lib/images/logopizza.png" 
+            alt="Mr. Pizza" 
+            style={{
+              height: "80px",
+              width: "auto",
+              marginBottom: 32,
+            }}
+          />
           <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "2rem", color: "var(--color-smoke)", marginBottom: 8 }}>ADMIN</h1>
-          <p style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 14, color: "var(--color-fire)", marginBottom: 32 }}>MR. PIZZA</p>
           <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="Mot de passe" autoFocus style={{ width: "100%", height: 48, background: "var(--color-surface)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 14, padding: "0 16px", outline: "none", marginBottom: 12, boxSizing: "border-box" }} onFocus={(e) => (e.currentTarget.style.borderColor = "var(--color-fire)")} onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)")} />
           {err && <p style={{ color: "#ef4444", fontSize: 13, margin: "0 0 12px" }}>{err}</p>}
           <button type="submit" className="press" style={{ width: "100%", height: 48, background: "var(--color-fire)", color: "#0D0D0D", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 13, textTransform: "uppercase", cursor: "pointer" }}>Se connecter</button>
@@ -52,8 +60,15 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     <div style={{ display: "flex", minHeight: "100vh", background: "#0D0D0D" }}>
       {/* Sidebar */}
       <aside style={{ width: 240, background: "var(--color-surface)", padding: "24px 0", display: "flex", flexDirection: "column", borderRight: "1px solid rgba(255,255,255,0.05)", flexShrink: 0, position: "sticky", top: 0, height: "100vh" }}>
-        <div style={{ padding: "0 24px 24px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-          <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 18, color: "var(--color-smoke)" }}>MR. PIZZA</span>
+        <div style={{ padding: "0 24px 24px", borderBottom: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center" }}>
+          <img 
+            src="/src/lib/images/logopizza.png" 
+            alt="Mr. Pizza" 
+            style={{
+              height: "40px",
+              width: "auto",
+            }}
+          />
         </div>
         <nav style={{ flex: 1, padding: "16px 0" }}>
           {tabs.map((t) => (

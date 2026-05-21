@@ -61,383 +61,119 @@ export default function HomePage() {
       {/* ── HERO ─────────────────────────── */}
       <section
         style={{
-          minHeight: "calc(100svh - 150px)",
-          padding: "40px 32px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          position: "relative",
-          backgroundImage: "linear-gradient(rgba(13, 13, 13, 0.6), rgba(13, 13, 13, 0.95)), url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2070&auto=format&fit=crop')",
+          minHeight: "calc(100svh - 140px)",
+          padding: "48px 28px",
+          display: "grid",
+          gridTemplateColumns: "1.1fr minmax(320px, 420px)",
+          gridTemplateRows: "auto auto",
+          gap: "36px",
+          alignItems: "center",
+          backgroundImage: "linear-gradient(rgba(13, 13, 13, 0.72), rgba(13, 13, 13, 0.72)), url('/src/lib/images/Pizza.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          borderRadius: "0 0 24px 24px",
+          borderRadius: "0 0 28px 28px",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <p
-          style={{
-            fontFamily: "var(--font-body)",
-            fontSize: 13,
-            textTransform: "uppercase",
-            letterSpacing: "0.15em",
-            color: "var(--color-cream)",
-            marginBottom: 16,
-            opacity: 0.8,
-          }}
-        >
-          LOMÉ A FAIM.
-        </p>
+        <div style={{ maxWidth: 760, minHeight: "100%", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
+            <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.24em", color: "#FFB18C", background: "rgba(255,77,28,0.14)", padding: "10px 18px", borderRadius: 999 }}>
+              RAPIDE & SIMPLE
+            </span>
+            <span style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--color-cream)", opacity: 0.9 }}>
+              Une page claire, un menu rapide et un service qui assure.
+            </span>
+          </div>
 
-        <AnimatedTitle text={"LE FEU\nSOUS LA\nCROÛTE."} />
-
-        <p
-          style={{
-            fontFamily: "var(--font-body)",
-            fontSize: 16,
-            color: "var(--color-cream)",
-            opacity: 0.6,
-            maxWidth: 420,
-            lineHeight: 1.6,
-            marginTop: 16,
-            marginBottom: 24,
-          }}
-        >
-          {data.heroMessage}
-        </p>
-
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <Link
-            to="/menu"
-            className="press"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "14px 32px",
-              background: "var(--color-fire)",
-              color: "#0D0D0D",
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontSize: 13,
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              textDecoration: "none",
-              borderRadius: "var(--radius-sm)",
-              transition: "background 200ms",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-fire-dark)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "var(--color-fire)")}
-          >
-            Voir le menu
-          </Link>
-          <a
-            href="https://wa.me/22891599999"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="press"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "14px 32px",
-              background: "transparent",
-              color: "var(--color-smoke)",
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontSize: 13,
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              textDecoration: "none",
-              borderRadius: "var(--radius-sm)",
-              border: "1px solid rgba(255,255,255,0.2)",
-              transition: "border-color 200ms",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--color-fire)")}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)")}
-          >
-            <MessageCircle size={16} />
-            Commander WhatsApp
-          </a>
-        </div>
-
-        {/* Scroll arrow */}
-        <div
-          className="arrow-bob"
-          style={{
-            position: "absolute",
-            bottom: 40,
-            left: "50%",
-            transform: "translateX(-50%)",
-            color: "var(--color-smoke)",
-            opacity: 0.3,
-          }}
-        >
-          <ArrowDown size={24} />
-        </div>
-      </section>
-
-      {/* ── NOS SIGNATURES ──────────────── */}
-      <section style={{ padding: "80px 32px", maxWidth: 1200, margin: "0 auto" }}>
-        <Reveal>
-          <h2
+          <h1
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 800,
-              fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              textTransform: "uppercase",
-              letterSpacing: "-0.02em",
+              fontSize: "clamp(3rem, 7vw, 5rem)",
+              lineHeight: 0.95,
               color: "var(--color-smoke)",
-              marginTop: 0,
-              marginBottom: 48,
+              margin: 0,
+              textTransform: "uppercase",
+              letterSpacing: "-0.04em",
             }}
           >
-            Nos signatures
-          </h2>
-        </Reveal>
+            Pizza rapide.
+            <br />
+            Choix clair.
+          </h1>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: 24,
-          }}
-        >
-          {signatures.map((item: any, i: number) => (
-            <Reveal key={item.id}>
-              <div
-                style={{
-                  background: "var(--color-surface)",
-                  borderRadius: "var(--radius-md)",
-                  overflow: "hidden",
-                  transition: "transform 300ms",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px)")}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-              >
-                <div className="photo-wrap" style={{ height: 220 }}>
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="photo"
-                    loading="lazy"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  />
-                </div>
-                <div style={{ padding: "20px 24px" }}>
-                  <h3
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontWeight: 700,
-                      fontSize: 16,
-                      color: "var(--color-smoke)",
-                      margin: 0,
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {item.name}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: 13,
-                      color: "var(--color-cream)",
-                      opacity: 0.6,
-                      margin: "8px 0 12px",
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {item.description}
-                  </p>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontWeight: 700,
-                      color: "var(--color-fire)",
-                      fontSize: 15,
-                    }}
-                  >
-                    {formatFCFA(item.price)}
-                  </span>
-                </div>
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: 17,
+              color: "var(--color-cream)",
+              opacity: 0.8,
+              maxWidth: 520,
+              lineHeight: 1.75,
+              marginTop: 24,
+              marginBottom: 30,
+            }}
+          >
+            {data.heroMessage}
+          </p>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 18, width: "100%" }}>
+          <div style={{ width: "100%", maxWidth: 420, borderRadius: 28, overflow: "hidden", boxShadow: "0 26px 60px rgba(0,0,0,0.24)", border: "1px solid rgba(255,255,255,0.10)" }}>
+            <img
+              src="/src/lib/images/Pizza1.jpg"
+              alt={signatures[0]?.name || "Pizza"}
+              style={{ width: "100%", aspectRatio: "4 / 3", objectFit: "cover" }}
+            />
+            <div style={{ padding: 20, background: "rgba(13,13,13,0.9)" }}>
+              <p style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 14, color: "var(--color-smoke)", margin: 0, textTransform: "uppercase" }}>
+                {signatures[0]?.name}
+              </p>
+              <p style={{ fontSize: 13, color: "var(--color-cream)", opacity: 0.8, margin: "10px 0 0", lineHeight: 1.5 }}>
+                {signatures[0]?.description}
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 14, width: "100%", maxWidth: 420 }}>
+            {signatures.slice(1, 3).map((item: any) => (
+              <div key={item.id} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 22, padding: 18 }}>
+                <p style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 13, margin: 0, color: "var(--color-smoke)", textTransform: "uppercase" }}>{item.name}</p>
+                <p style={{ fontSize: 12, color: "var(--color-cream)", opacity: 0.78, margin: "8px 0 0", lineHeight: 1.5 }}>{item.description}</p>
               </div>
-            </Reveal>
-          ))}
+            ))}
+          </div>
         </div>
-      </section>
 
-      {/* ── COMMENT ÇA MARCHE ───────────── */}
-      <section style={{ padding: "80px 32px", maxWidth: 1200, margin: "0 auto" }}>
-        <Reveal>
-          <h2
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 800,
-              fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              textTransform: "uppercase",
-              letterSpacing: "-0.02em",
-              color: "var(--color-smoke)",
-              marginTop: 0,
-              marginBottom: 48,
-            }}
-          >
-            Comment ça marche
-          </h2>
-        </Reveal>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: 32,
-          }}
-        >
-          {[
-            { step: "01", title: "Choisir", desc: "Parcourez notre menu et choisissez vos plats préférés." },
-            { step: "02", title: "WhatsApp", desc: "Envoyez votre commande en un clic via WhatsApp." },
-            { step: "03", title: "Récupérer / Livré", desc: "Récupérez sur place ou faites-vous livrer." },
-          ].map((s) => (
-            <Reveal key={s.step}>
-              <div
-                style={{
-                  padding: 32,
-                  background: "var(--color-surface)",
-                  borderRadius: "var(--radius-md)",
-                  borderLeft: "3px solid var(--color-fire)",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 800,
-                    fontSize: "2.5rem",
-                    color: "var(--color-fire)",
-                    opacity: 0.3,
-                    lineHeight: 1,
-                  }}
-                >
-                  {s.step}
-                </span>
-                <h3
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 700,
-                    fontSize: 18,
-                    color: "var(--color-smoke)",
-                    textTransform: "uppercase",
-                    margin: "16px 0 8px",
-                  }}
-                >
-                  {s.title}
-                </h3>
-                <p style={{ fontSize: 14, color: "var(--color-cream)", opacity: 0.6, margin: 0, lineHeight: 1.6 }}>
-                  {s.desc}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ── POURQUOI MR. PIZZA ──────────── */}
-      <section style={{ padding: "80px 32px", maxWidth: 1200, margin: "0 auto" }}>
-        <Reveal>
-          <h2
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 800,
-              fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              textTransform: "uppercase",
-              letterSpacing: "-0.02em",
-              color: "var(--color-smoke)",
-              marginTop: 0,
-              marginBottom: 48,
-            }}
-          >
-            Pourquoi Mr. Pizza
-          </h2>
-        </Reveal>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: 24,
-          }}
-        >
-          {[
-            { title: "Sans additifs", desc: "Aucun conservateur, aucun colorant. Que du goût." },
-            { title: "Ingrédients frais", desc: "Approvisionnement local et produits de qualité." },
-            { title: "Cuisine ouverte", desc: "Voyez vos plats préparés sous vos yeux." },
-          ].map((v) => (
-            <Reveal key={v.title}>
-              <div
-                style={{
-                  padding: 32,
-                  background: "var(--color-surface)",
-                  borderRadius: "var(--radius-md)",
-                  textAlign: "center",
-                }}
-              >
-                <h3
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 700,
-                    fontSize: 15,
-                    color: "var(--color-fire)",
-                    textTransform: "uppercase",
-                    margin: "0 0 12px",
-                    letterSpacing: "0.05em",
-                  }}
-                >
-                  {v.title}
-                </h3>
-                <p style={{ fontSize: 14, color: "var(--color-cream)", opacity: 0.6, margin: 0, lineHeight: 1.6 }}>
-                  {v.desc}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ── CTA FINAL ───────────────────── */}
-      <Reveal>
-        <section
-          style={{
-            padding: "80px 32px",
-            textAlign: "center",
-          }}
-        >
-          <h2
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 800,
-              fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
-              textTransform: "uppercase",
-              color: "var(--color-smoke)",
-              marginTop: 0,
-              marginBottom: 24,
-            }}
-          >
-            Prêt à goûter le feu ?
-          </h2>
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+        <div style={{ gridColumn: "1 / -1", display: "flex", flexDirection: "column", alignItems: "center", gap: 20, paddingTop: 10 }}>
+          <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
             <Link
               to="/menu"
               className="press"
               style={{
-                padding: "16px 40px",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "16px 38px",
                 background: "var(--color-fire)",
                 color: "#0D0D0D",
                 fontFamily: "var(--font-display)",
                 fontWeight: 700,
                 fontSize: 14,
                 textTransform: "uppercase",
-                letterSpacing: "0.05em",
+                borderRadius: 999,
                 textDecoration: "none",
-                borderRadius: "var(--radius-sm)",
-                transition: "background 200ms",
+                transition: "transform 200ms, background 200ms",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-fire-dark)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--color-fire)")}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-1px)";
+                e.currentTarget.style.background = "var(--color-fire-dark)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.background = "var(--color-fire)";
+              }}
             >
               Voir le menu
             </Link>
@@ -447,24 +183,107 @@ export default function HomePage() {
               rel="noopener noreferrer"
               className="press"
               style={{
-                padding: "16px 40px",
-                background: "transparent",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "16px 38px",
+                background: "rgba(255,255,255,0.08)",
                 color: "var(--color-smoke)",
                 fontFamily: "var(--font-display)",
                 fontWeight: 700,
                 fontSize: 14,
                 textTransform: "uppercase",
-                letterSpacing: "0.05em",
+                borderRadius: 999,
                 textDecoration: "none",
-                borderRadius: "var(--radius-sm)",
-                border: "1px solid rgba(255,255,255,0.2)",
+                border: "1px solid rgba(255,255,255,0.14)",
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.16)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.08)")}
             >
-              Commander
+              Commander WhatsApp
             </a>
           </div>
-        </section>
-      </Reveal>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
+            <span className="feature-pill">15 min maxi</span>
+            <span className="feature-pill">Menu court</span>
+            <span className="feature-pill">Fresh local</span>
+          </div>
+        </div>
+
+        <div style={{ position: "absolute", top: "50%", right: "10%", width: 170, height: 170, borderRadius: "50%", background: "rgba(255,77,28,0.16)", filter: "blur(40px)", transform: "translateY(-50%)" }} />
+      </section>
+
+      {/* ── NOS COUPS DE COEUR ──────────── */}
+      <section style={{ padding: "80px 28px", maxWidth: 1150, margin: "0 auto" }}>
+        <Reveal>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 36 }}>
+            <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.2em", color: "#FFB18C" }}>
+              Choix du chef
+            </span>
+            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3rem)", margin: 0, color: "var(--color-smoke)", lineHeight: 1.05 }}>
+              Nos coups de cœur de la semaine
+            </h2>
+            <p style={{ fontSize: 15, color: "var(--color-cream)", opacity: 0.75, maxWidth: 680, lineHeight: 1.7, margin: 0 }}>
+              Une sélection courte, claire et gourmande pour te faire gagner du temps et te mettre l’eau à la bouche.
+            </p>
+          </div>
+        </Reveal>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
+          {signatures.map((item: any) => (
+            <Reveal key={item.id}>
+              <div style={{ background: "var(--color-surface)", borderRadius: 24, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", transition: "transform 200ms" }}>
+                <div style={{ height: 200, overflow: "hidden" }}>
+                  <img src={item.image} alt={item.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+                <div style={{ padding: "22px 20px" }}>
+                  <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 18, margin: 0, color: "var(--color-smoke)", textTransform: "uppercase" }}>{item.name}</h3>
+                  <p style={{ fontSize: 14, color: "var(--color-cream)", opacity: 0.8, margin: "12px 0 16px", lineHeight: 1.6 }}>{item.description}</p>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, color: "var(--color-fire)", fontSize: 15 }}>{formatFCFA(item.price)}</span>
+                    <span style={{ fontSize: 12, color: "var(--color-cream)", opacity: 0.7, textTransform: "uppercase", letterSpacing: "0.12em" }}>Pizza star</span>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ── POURQUOI NOUS ─────────────── */}
+      <section style={{ padding: "0 28px 80px", maxWidth: 1150, margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, alignItems: "center" }}>
+          <div>
+            <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.2em", color: "#FFB18C" }}>
+              Simple et pertinent
+            </span>
+            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3rem)", margin: "16px 0 20px", color: "var(--color-smoke)", lineHeight: 1.05 }}>
+              Pourquoi choisir Mr. Pizza ?
+            </h2>
+            <p style={{ fontSize: 15, color: "var(--color-cream)", opacity: 0.8, maxWidth: 520, lineHeight: 1.75, marginBottom: 32 }}>
+              Rapide, frais, local. On garde une carte courte, des recettes claires et un service qui fait plaisir.
+            </p>
+            <div style={{ display: "grid", gap: 16 }}>
+              {["Cuisine visible", "Ingrédients locaux", "Service rapide"].map((text) => (
+                <div key={text} style={{ display: "flex", gap: 14, alignItems: "center" }}>
+                  <div style={{ width: 12, height: 12, borderRadius: "50%", background: "var(--color-fire)" }} />
+                  <span style={{ color: "var(--color-cream)", opacity: 0.85, fontSize: 15 }}>{text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "grid", gap: 16 }}>
+            <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 24, padding: 22 }}>
+              <p style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: 13, color: "var(--color-fire)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Statut du restaurant</p>
+              <p style={{ margin: "12px 0 0", fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 36, color: "var(--color-smoke)" }}>{data.status === "open" ? "OUVERT" : "FERMÉ"}</p>
+            </div>
+            <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 24, padding: 22 }}>
+              <p style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: 13, color: "var(--color-fire)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Adresse</p>
+              <p style={{ margin: "12px 0 0", fontSize: 14, color: "var(--color-cream)", opacity: 0.9, lineHeight: 1.7 }}>{data.address}</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

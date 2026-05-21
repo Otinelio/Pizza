@@ -34,17 +34,15 @@ export default function Footer() {
       >
         {/* Logo + tagline */}
         <div>
-          <div
+          <img 
+            src="/src/lib/images/logopizza.png" 
+            alt="Mr. Pizza" 
             style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 800,
-              fontSize: "1.5rem",
-              color: "var(--color-smoke)",
+              height: "60px",
+              width: "auto",
               marginBottom: "12px",
             }}
-          >
-            MR. PIZZA
-          </div>
+          />
           <p
             style={{
               fontFamily: "var(--font-body)",
