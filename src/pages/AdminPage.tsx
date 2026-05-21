@@ -135,7 +135,7 @@ function TabCategories({ data, save }: { data: RestaurantData; save: (d: Restaur
   return (
     <div>
       <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.5rem", color: "var(--color-smoke)", margin: "0 0 32px", textTransform: "uppercase" }}>Gestion des Catégories</h2>
-      
+
       <form onSubmit={addCategory} style={{ display: "flex", gap: 12, marginBottom: 32, maxWidth: 400 }}>
         <input required type="text" value={newCat} onChange={(e) => setNewCat(e.target.value)} disabled={loading} placeholder="Nouvelle catégorie" style={{ flex: 1, height: 40, background: "var(--color-surface)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 13, padding: "0 12px", outline: "none" }} />
         <button type="submit" disabled={loading} className="press" style={{ height: 40, padding: "0 20px", background: "var(--color-fire)", color: "#0D0D0D", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: loading ? "wait" : "pointer" }}>Ajouter</button>
@@ -211,21 +211,21 @@ function TabCuisine({ data }: { data: RestaurantData }) {
       <div style={{ position: "sticky", top: -32, zIndex: 10, background: "var(--color-bg)", padding: "32px 0 16px", margin: "-32px 0 32px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.5rem", color: "var(--color-smoke)", margin: 0, textTransform: "uppercase" }}>Gestion de la cuisine</h2>
-          
+
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ display: "flex", alignItems: "center", background: "var(--color-surface)", borderRadius: "var(--radius-sm)", border: "1px solid rgba(255,255,255,0.1)", overflow: "hidden", width: searchExpanded ? 240 : 44, transition: "width 300ms ease-in-out" }}>
               <button onClick={() => setSearchExpanded(!searchExpanded)} style={{ background: "none", border: "none", color: "var(--color-cream)", width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
                 <Search size={18} />
               </button>
-              <input 
-                type="search" 
-                placeholder="Rechercher un plat..." 
+              <input
+                type="search"
+                placeholder="Rechercher un plat..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ width: "100%", height: 44, background: "transparent", border: "none", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 14, outline: "none", paddingRight: 12, opacity: searchExpanded ? 1 : 0, transition: "opacity 300ms ease-in-out" }} 
+                style={{ width: "100%", height: 44, background: "transparent", border: "none", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 14, outline: "none", paddingRight: 12, opacity: searchExpanded ? 1 : 0, transition: "opacity 300ms ease-in-out" }}
               />
             </div>
-            
+
             <button disabled={isProcessing} onClick={() => { setEditItem({ id: `item-${Date.now()}`, name: "", description: "", price: 0, category: data.categories[0], image: "", available: true }); setShowAdd(true); }} className="press" style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 20px", background: "var(--color-fire)", color: "#0D0D0D", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: isProcessing ? "wait" : "pointer", opacity: isProcessing ? 0.7 : 1, whiteSpace: "nowrap" }}>
               <Plus size={14} /> Ajouter un plat
             </button>
@@ -234,8 +234,8 @@ function TabCuisine({ data }: { data: RestaurantData }) {
       </div>
 
       {data.categories.map(cat => {
-        const items = data.items.filter(i => 
-          i.category === cat && 
+        const items = data.items.filter(i =>
+          i.category === cat &&
           i.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
         if (!items.length) return null;
@@ -407,7 +407,7 @@ function ItemModal({ item, categories, onSave, onClose }: { item: MenuItem; cate
                 <Plus size={12} /> Ajouter
               </button>
             </div>
-            
+
             <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 180, overflowY: "auto", paddingRight: 4 }}>
               {(form.supplements || []).map((sup, idx) => (
                 <div key={idx} style={{ display: "flex", gap: 8, alignItems: "center" }}>
@@ -490,11 +490,85 @@ function TabQR() {
         <input type="number" min={1} max={50} value={count} onChange={(e) => setCount(Math.min(50, Math.max(1, parseInt(e.target.value) || 1)))} style={{ width: 80, height: 36, background: "var(--color-surface)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 14, textAlign: "center", outline: "none" }} />
         <button onClick={() => window.print()} className="press" style={{ padding: "8px 20px", background: "var(--color-fire)", color: "#0D0D0D", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: "pointer" }}>Imprimer</button>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 20 }}>
         {Array.from({ length: count }, (_, i) => i + 1).map(n => (
-          <div key={n} style={{ background: "var(--color-surface)", borderRadius: "var(--radius-md)", padding: 20, textAlign: "center" }}>
-            <p style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 14, color: "var(--color-smoke)", margin: "0 0 12px" }}>Table {n}</p>
-            <QRCodeSVG value={`${window.location.origin}/menu/scan?table=${n}`} size={120} bgColor="transparent" fgColor="#F8F8F8" />
+          <div
+            key={n}
+            style={{
+              background: "linear-gradient(135deg, var(--color-surface) 0%, #151515 100%)",
+              borderRadius: "var(--radius-md)",
+              padding: "24px 20px",
+              textAlign: "center",
+              border: "1px solid rgba(255, 77, 28, 0.15)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+              position: "relative",
+              overflow: "hidden"
+            }}
+          >
+            {/* Glowing top line */}
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "linear-gradient(90deg, var(--color-fire) 0%, #ff883b 100%)" }} />
+
+            {/* Background design accents */}
+            <div style={{ position: "absolute", top: -20, left: -20, width: 60, height: 60, borderRadius: "50%", background: "var(--color-fire)", filter: "blur(40px)", opacity: 0.15, pointerEvents: "none" }} />
+            <div style={{ position: "absolute", bottom: -20, right: -20, width: 60, height: 60, borderRadius: "50%", background: "var(--color-fire)", filter: "blur(40px)", opacity: 0.15, pointerEvents: "none" }} />
+
+            {/* Restaurant Branding Header */}
+            <div style={{ marginBottom: 16 }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18, color: "var(--color-smoke)", display: "block", marginTop: 4 }}>
+                Table {n}
+              </span>
+            </div>
+
+            {/* Beautiful QR Code container with subtle glow */}
+            <div style={{
+              background: "#0D0D0D",
+              padding: 16,
+              borderRadius: "var(--radius-sm)",
+              display: "inline-block",
+              border: "1px solid rgba(255,77,28,0.1)",
+              boxShadow: "0 4px 20px rgba(255,77,28,0.05)",
+              position: "relative"
+            }}>
+              <QRCodeSVG
+                value={`${window.location.origin}/menu/scan?table=${n}`}
+                size={130}
+                bgColor="#0D0D0D"
+                fgColor="var(--color-fire)"
+                level="H"
+                imageSettings={{
+                  src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'></svg>",
+                  height: 32,
+                  width: 32,
+                  excavate: true
+                }}
+              />
+              <div style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                background: "#0D0D0D",
+                padding: "2px 6px",
+                border: "1px solid var(--color-fire)",
+                borderRadius: 4,
+                fontFamily: "var(--font-display)",
+                fontWeight: 900,
+                fontSize: 8,
+                color: "var(--color-fire)",
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
+                whiteSpace: "nowrap"
+              }}>
+                Mr. Pizza
+              </div>
+            </div>
+
+            {/* Instruction Footer */}
+            <div style={{ marginTop: 16 }}>
+              <span style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--color-cream)", opacity: 0.6, display: "block", fontWeight: 500 }}>
+                Scannez pour voir le menu
+              </span>
+            </div>
           </div>
         ))}
       </div>

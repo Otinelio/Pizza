@@ -85,8 +85,8 @@ function AppShell() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <CartFab />
-      <CartDrawer />
+      {!isScan && <CartFab />}
+      {!isScan && <CartDrawer />}
       {!isScan && <Footer />}
       {!isScan && <BottomNav />}
     </CartProvider>

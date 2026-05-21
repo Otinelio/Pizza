@@ -432,70 +432,72 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                 >
                   {formatFCFA(item.price)}
                 </span>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  {item.supplements && item.supplements.length > 0 && (
+                {!scanMode && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    {item.supplements && item.supplements.length > 0 && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setSelectedItem(item); }}
+                        className="press"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 4,
+                          padding: "8px 12px",
+                          background: "rgba(255,77,28,0.1)",
+                          color: "var(--color-fire)",
+                          border: "1px solid rgba(255,77,28,0.2)",
+                          borderRadius: "var(--radius-sm)",
+                          fontFamily: "var(--font-display)",
+                          fontWeight: 700,
+                          fontSize: 10,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                          cursor: "pointer",
+                          transition: "all 200ms",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = "rgba(255,77,28,0.2)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = "rgba(255,77,28,0.1)";
+                        }}
+                      >
+                        + Supplément
+                      </button>
+                    )}
                     <button
-                      onClick={(e) => { e.stopPropagation(); setSelectedItem(item); }}
+                      onClick={(e) => { e.stopPropagation(); handleAdd(item); }}
+                      disabled={!item.available}
                       className="press"
                       style={{
                         display: "flex",
                         alignItems: "center",
                         gap: 4,
-                        padding: "8px 12px",
-                        background: "rgba(255,77,28,0.1)",
-                        color: "var(--color-fire)",
-                        border: "1px solid rgba(255,77,28,0.2)",
+                        padding: "8px 16px",
+                        background: item.available ? "var(--color-fire)" : "rgba(255,255,255,0.1)",
+                        color: item.available ? "#0D0D0D" : "var(--color-smoke)",
+                        border: "none",
                         borderRadius: "var(--radius-sm)",
                         fontFamily: "var(--font-display)",
                         fontWeight: 700,
-                        fontSize: 10,
+                        fontSize: 11,
                         textTransform: "uppercase",
                         letterSpacing: "0.05em",
-                        cursor: "pointer",
-                        transition: "all 200ms",
+                        cursor: item.available ? "pointer" : "not-allowed",
+                        transition: "background 200ms",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "rgba(255,77,28,0.2)";
+                        if (item.available) e.currentTarget.style.background = "var(--color-fire-dark)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "rgba(255,77,28,0.1)";
+                        if (item.available) e.currentTarget.style.background = "var(--color-fire)";
                       }}
                     >
-                      + Supplément
+                      <Plus size={14} />
+                      Ajouter
                     </button>
-                  )}
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleAdd(item); }}
-                    disabled={!item.available}
-                    className="press"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 4,
-                      padding: "8px 16px",
-                      background: item.available ? "var(--color-fire)" : "rgba(255,255,255,0.1)",
-                      color: item.available ? "#0D0D0D" : "var(--color-smoke)",
-                      border: "none",
-                      borderRadius: "var(--radius-sm)",
-                      fontFamily: "var(--font-display)",
-                      fontWeight: 700,
-                      fontSize: 11,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                      cursor: item.available ? "pointer" : "not-allowed",
-                      transition: "background 200ms",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (item.available) e.currentTarget.style.background = "var(--color-fire-dark)";
-                    }}
-                    onMouseLeave={(e) => {
-                      if (item.available) e.currentTarget.style.background = "var(--color-fire)";
-                    }}
-                  >
-                    <Plus size={14} />
-                    Ajouter
-                  </button>
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -545,7 +547,19 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                 {hasSupplements && (
                   <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 16, marginTop: 16 }}>
                     
-                    {cartLinesOfItem.length === 0 ? (
+                    {scanMode ? (
+                      <div>
+                        <h4 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", color: "var(--color-fire)", margin: "0 0 10px" }}>Suppléments disponibles :</h4>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                          {selectedItem.supplements?.map((sup) => (
+                            <div key={sup.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: "rgba(255,255,255,0.02)", borderRadius: "var(--radius-sm)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                              <span style={{ fontSize: 13, color: "var(--color-cream)" }}>{sup.name}</span>
+                              <span style={{ fontSize: 12, color: "var(--color-fire)", fontWeight: 600 }}>+{formatFCFA(sup.price)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : cartLinesOfItem.length === 0 ? (
                       <div>
                         <p style={{ color: "var(--color-cream)", opacity: 0.6, fontSize: 13, lineHeight: 1.5, marginBottom: 16, fontStyle: "italic" }}>
                           💡 Vous devez ajouter ce produit au panier avant de pouvoir lui ajouter des suppléments.
@@ -638,7 +652,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                 )}
 
                 {/* Si pas de suppléments configurés, bouton classique d'ajout au panier */}
-                {!hasSupplements && (
+                {!hasSupplements && !scanMode && (
                   <button
                     onClick={() => { handleAdd(selectedItem); setSelectedItem(null); }}
                     disabled={!selectedItem.available}
