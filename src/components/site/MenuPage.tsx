@@ -1,6 +1,19 @@
 import { useState, useEffect } from "react";
-import { Plus, Clock, ChefHat, CheckCircle2, Search, X } from "lucide-react";
+import { Plus, Clock, ChefHat, CheckCircle2, Search, X, Pizza, Coffee, IceCream, Utensils, Sandwich, CupSoda, Beef, Salad, Wine } from "lucide-react";
 import { getRestaurantData, formatFCFA, type MenuItem, getOrders, type KitchenOrder } from "@/lib/data";
+
+const getCategoryIcon = (category: string) => {
+  const cat = category.toLowerCase();
+  if (cat.includes("pizza")) return Pizza;
+  if (cat.includes("boisson") || cat.includes("drink") || cat.includes("cocktail") || cat.includes("jus")) return CupSoda;
+  if (cat.includes("dessert") || cat.includes("glace")) return IceCream;
+  if (cat.includes("café") || cat.includes("coffee") || cat.includes("chaud") || cat.includes("thé")) return Coffee;
+  if (cat.includes("sandwich") || cat.includes("burger") || cat.includes("panini") || cat.includes("croque")) return Sandwich;
+  if (cat.includes("viande") || cat.includes("grill") || cat.includes("poulet")) return Beef;
+  if (cat.includes("salade") || cat.includes("entrée") || cat.includes("entree")) return Salad;
+  if (cat.includes("vin") || cat.includes("alcool")) return Wine;
+  return Utensils;
+};
 import { useCart } from "@/lib/cart";
 
 interface MenuPageProps {
@@ -312,7 +325,9 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
           margin: "0 auto",
         }}
       >
-        {filtered.map((item) => (
+        {filtered.map((item) => {
+          const CategoryIcon = getCategoryIcon(item.category);
+          return (
           <div
             key={item.id}
             onClick={() => setSelectedItem(item)}
@@ -370,8 +385,11 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                   style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                 />
               ) : (
-                <div style={{ width: "100%", height: "100%", background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                   <ChefHat size={32} style={{ color: "var(--color-cream)", opacity: 0.3 }} />
+                <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, rgba(255,77,28,0.05) 0%, rgba(0,0,0,0.4) 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+                  <div style={{ position: "absolute", top: -20, right: -20, opacity: 0.03 }}>
+                    <CategoryIcon size={120} color="var(--color-fire)" />
+                  </div>
+                  <CategoryIcon size={40} style={{ color: "var(--color-fire)", opacity: 0.4, filter: "drop-shadow(0 0 10px rgba(255,77,28,0.2))" }} />
                 </div>
               )}
             </div>
@@ -481,13 +499,14 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
               </div>
             </div>
           </div>
-        ))}
+        );})}
       </div>
 
       {/* Item Info Modal */}
       {selectedItem && (() => {
         const cartLinesOfItem = cart.lines.filter(l => l.item.id === selectedItem.id);
         const hasSupplements = selectedItem.supplements && selectedItem.supplements.length > 0;
+        const ModalCategoryIcon = getCategoryIcon(selectedItem.category);
 
         return (
           <div style={{ position: "fixed", inset: 0, zIndex: 500, background: "rgba(0,0,0,0.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }} onClick={() => setSelectedItem(null)}>
@@ -498,7 +517,12 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                 {selectedItem.image ? (
                   <img src={selectedItem.image} alt={selectedItem.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
-                  <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><ChefHat size={48} style={{ color: "var(--color-cream)", opacity: 0.3 }} /></div>
+                  <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, rgba(255,77,28,0.1) 0%, rgba(0,0,0,0.5) 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+                     <div style={{ position: "absolute", top: -30, right: -30, opacity: 0.04 }}>
+                       <ModalCategoryIcon size={200} color="var(--color-fire)" />
+                     </div>
+                     <ModalCategoryIcon size={64} style={{ color: "var(--color-fire)", opacity: 0.5, filter: "drop-shadow(0 0 15px rgba(255,77,28,0.3))" }} />
+                  </div>
                 )}
                 <button onClick={() => setSelectedItem(null)} style={{ position: "absolute", top: 16, right: 16, background: "rgba(0,0,0,0.5)", border: "none", color: "white", width: 32, height: 32, borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", backdropFilter: "blur(4px)" }}><X size={18} /></button>
               </div>
