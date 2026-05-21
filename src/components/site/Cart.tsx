@@ -105,7 +105,17 @@ export function CartDrawer() {
       const newOrder = {
         id: orderId,
         table: tableNumber,
-        items: lines.map((l) => ({ name: l.item.name, qty: l.qty, price: l.item.price })),
+        items: lines.map((l) => {
+          const sups = l.selectedSupplements && l.selectedSupplements.length > 0
+            ? ` (${l.selectedSupplements.map(s => s.name).join(", ")})`
+            : "";
+          const supsTotal = l.selectedSupplements?.reduce((sum, s) => sum + s.price, 0) || 0;
+          return {
+            name: `${l.item.name}${sups}`,
+            qty: l.qty,
+            price: l.item.price + supsTotal
+          };
+        }),
         note: note.trim(),
         total,
         status: "pending" as const,
@@ -121,7 +131,12 @@ export function CartDrawer() {
       msg += "Bonjour Mr. Pizza Lomé !\n\nNOUVELLE COMMANDE :\n";
     }
     lines.forEach((l) => {
-      msg += `${l.item.name} x${l.qty} — ${formatFCFA(l.item.price * l.qty)}\n`;
+      const sups = l.selectedSupplements && l.selectedSupplements.length > 0
+        ? ` (${l.selectedSupplements.map(s => s.name).join(", ")})`
+        : "";
+      const supsTotal = l.selectedSupplements?.reduce((sum, s) => sum + s.price, 0) || 0;
+      const lineSinglePrice = l.item.price + supsTotal;
+      msg += `${l.item.name}${sups} x${l.qty} — ${formatFCFA(lineSinglePrice * l.qty)}\n`;
     });
     msg += `\nTOTAL : ${formatFCFA(total)}`;
     msg += `\nNote : ${note.trim() || "Aucune note"}`;
@@ -213,99 +228,109 @@ export function CartDrawer() {
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {lines.map((l) => (
-                <div
-                  key={l.item.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 12,
-                    padding: "12px 0",
-                    borderBottom: "1px solid rgba(255,255,255,0.05)",
-                  }}
-                >
-                  <div style={{ flex: 1 }}>
-                    <div
-                      style={{
-                        fontFamily: "var(--font-display)",
-                        fontWeight: 600,
-                        fontSize: 14,
-                        color: "var(--color-smoke)",
-                      }}
-                    >
-                      {l.item.name}
-                    </div>
-                    <div style={{ fontFamily: "var(--font-display)", fontSize: 13, color: "var(--color-fire)", marginTop: 4 }}>
-                      {formatFCFA(l.item.price * l.qty)}
-                    </div>
-                  </div>
+              {lines.map((l) => {
+                const supsTotal = l.selectedSupplements?.reduce((sum, s) => sum + s.price, 0) || 0;
+                const linePrice = (l.item.price + supsTotal) * l.qty;
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <button
-                      onClick={() => dec(l.item.id)}
-                      className="press"
-                      style={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: "var(--radius-sm)",
-                        border: "1px solid rgba(255,255,255,0.15)",
-                        background: "transparent",
-                        color: "var(--color-smoke)",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Minus size={14} />
-                    </button>
-                    <span
-                      style={{
-                        fontFamily: "var(--font-display)",
-                        fontWeight: 700,
-                        fontSize: 14,
-                        minWidth: 20,
-                        textAlign: "center",
-                        color: "var(--color-smoke)",
-                      }}
-                    >
-                      {l.qty}
-                    </span>
-                    <button
-                      onClick={() => inc(l.item.id)}
-                      className="press"
-                      style={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: "var(--radius-sm)",
-                        border: "1px solid rgba(255,255,255,0.15)",
-                        background: "transparent",
-                        color: "var(--color-smoke)",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Plus size={14} />
-                    </button>
-                  </div>
-
-                  <button
-                    onClick={() => remove(l.item.id)}
+                return (
+                  <div
+                    key={l.id}
                     style={{
-                      background: "none",
-                      border: "none",
-                      color: "var(--color-smoke)",
-                      opacity: 0.3,
-                      cursor: "pointer",
-                      padding: 4,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                      padding: "12px 0",
+                      borderBottom: "1px solid rgba(255,255,255,0.05)",
                     }}
                   >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              ))}
+                    <div style={{ flex: 1 }}>
+                      <div
+                        style={{
+                          fontFamily: "var(--font-display)",
+                          fontWeight: 600,
+                          fontSize: 14,
+                          color: "var(--color-smoke)",
+                        }}
+                      >
+                        {l.item.name}
+                      </div>
+                      {l.selectedSupplements && l.selectedSupplements.length > 0 && (
+                        <div style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--color-cream)", opacity: 0.6, marginTop: 2, fontStyle: "italic" }}>
+                          + {l.selectedSupplements.map(s => s.name).join(", ")}
+                        </div>
+                      )}
+                      <div style={{ fontFamily: "var(--font-display)", fontSize: 13, color: "var(--color-fire)", marginTop: 4 }}>
+                        {formatFCFA(linePrice)}
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <button
+                        onClick={() => dec(l.id)}
+                        className="press"
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: "var(--radius-sm)",
+                          border: "1px solid rgba(255,255,255,0.15)",
+                          background: "transparent",
+                          color: "var(--color-smoke)",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Minus size={14} />
+                      </button>
+                      <span
+                        style={{
+                          fontFamily: "var(--font-display)",
+                          fontWeight: 700,
+                          fontSize: 14,
+                          minWidth: 20,
+                          textAlign: "center",
+                          color: "var(--color-smoke)",
+                        }}
+                      >
+                        {l.qty}
+                      </span>
+                      <button
+                        onClick={() => inc(l.id)}
+                        className="press"
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: "var(--radius-sm)",
+                          border: "1px solid rgba(255,255,255,0.15)",
+                          background: "transparent",
+                          color: "var(--color-smoke)",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
+
+                    <button
+                      onClick={() => remove(l.id)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "var(--color-smoke)",
+                        opacity: 0.3,
+                        cursor: "pointer",
+                        padding: 4,
+                      }}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                );
+              })}
 
               {/* Note */}
               <textarea

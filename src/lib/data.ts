@@ -1,6 +1,11 @@
 import { supabase, isSupabaseConfigured } from "./supabase";
 
 // ── Types ──────────────────────────────────
+export interface Supplement {
+  name: string;
+  price: number;
+}
+
 export interface MenuItem {
   id: string;
   name: string;
@@ -10,6 +15,7 @@ export interface MenuItem {
   image: string;
   available: boolean;
   position?: number;
+  supplements?: Supplement[];
 }
 
 export interface RestaurantData {
@@ -114,6 +120,7 @@ export async function fetchRestaurantData(): Promise<RestaurantData> {
         image: (i.image_url as string) || "",
         available: i.available !== false,
         position: (i.position as number) || 0,
+        supplements: (i.supplements as Supplement[]) || [],
       })),
     };
 
@@ -199,6 +206,7 @@ export async function saveRestaurantDataAsync(data: RestaurantData): Promise<voi
         image_url: item.image,
         available: item.available,
         position: i,
+        supplements: item.supplements || [],
       });
     }
   } catch (err) {
@@ -240,6 +248,7 @@ export async function addMenuItem(item: MenuItem): Promise<void> {
     image_url: item.image,
     available: item.available,
     position: 999,
+    supplements: item.supplements || [],
   });
 }
 
@@ -259,6 +268,7 @@ export async function updateMenuItem(item: MenuItem): Promise<void> {
     category_name: item.category,
     image_url: item.image,
     available: item.available,
+    supplements: item.supplements || [],
   }).eq("id", item.id);
 }
 
@@ -355,6 +365,7 @@ export async function initSupabaseData(): Promise<void> {
         image_url: item.image,
         available: item.available,
         position: i,
+        supplements: item.supplements || [],
       }))
     );
 

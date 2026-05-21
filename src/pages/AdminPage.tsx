@@ -208,23 +208,28 @@ function TabCuisine({ data }: { data: RestaurantData }) {
 
   return (
     <div>
-      <div style={{ position: "sticky", top: -32, zIndex: 10, background: "#0D0D0D", padding: "32px 0 16px", margin: "-32px 0 32px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+      <div style={{ position: "sticky", top: -32, zIndex: 10, background: "var(--color-bg)", padding: "32px 0 16px", margin: "-32px 0 32px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.5rem", color: "var(--color-smoke)", margin: 0, textTransform: "uppercase" }}>Gestion de la cuisine</h2>
-          <button disabled={isProcessing} onClick={() => { setEditItem({ id: `item-${Date.now()}`, name: "", description: "", price: 0, category: data.categories[0], image: "", available: true }); setShowAdd(true); }} className="press" style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 20px", background: "var(--color-fire)", color: "#0D0D0D", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: isProcessing ? "wait" : "pointer", opacity: isProcessing ? 0.7 : 1, whiteSpace: "nowrap" }}><Plus size={14} /> Ajouter un plat</button>
-        </div>
-        
-        <div style={{ display: "flex", alignItems: "center", background: "var(--color-surface)", borderRadius: "var(--radius-sm)", border: "1px solid rgba(255,255,255,0.1)", overflow: "hidden", width: searchExpanded ? "100%" : 44, maxWidth: 400, transition: "width 300ms ease-in-out" }}>
-          <button onClick={() => setSearchExpanded(!searchExpanded)} style={{ background: "none", border: "none", color: "var(--color-cream)", width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
-            <Search size={18} />
-          </button>
-          <input 
-            type="search" 
-            placeholder="Rechercher un plat..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ width: "100%", height: 44, background: "transparent", border: "none", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 14, outline: "none", paddingRight: 12, opacity: searchExpanded ? 1 : 0, transition: "opacity 300ms ease-in-out" }} 
-          />
+          
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ display: "flex", alignItems: "center", background: "var(--color-surface)", borderRadius: "var(--radius-sm)", border: "1px solid rgba(255,255,255,0.1)", overflow: "hidden", width: searchExpanded ? 240 : 44, transition: "width 300ms ease-in-out" }}>
+              <button onClick={() => setSearchExpanded(!searchExpanded)} style={{ background: "none", border: "none", color: "var(--color-cream)", width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+                <Search size={18} />
+              </button>
+              <input 
+                type="search" 
+                placeholder="Rechercher un plat..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ width: "100%", height: 44, background: "transparent", border: "none", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 14, outline: "none", paddingRight: 12, opacity: searchExpanded ? 1 : 0, transition: "opacity 300ms ease-in-out" }} 
+              />
+            </div>
+            
+            <button disabled={isProcessing} onClick={() => { setEditItem({ id: `item-${Date.now()}`, name: "", description: "", price: 0, category: data.categories[0], image: "", available: true }); setShowAdd(true); }} className="press" style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 20px", background: "var(--color-fire)", color: "#0D0D0D", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: isProcessing ? "wait" : "pointer", opacity: isProcessing ? 0.7 : 1, whiteSpace: "nowrap" }}>
+              <Plus size={14} /> Ajouter un plat
+            </button>
+          </div>
         </div>
       </div>
 
@@ -276,10 +281,34 @@ function ItemModal({ item, categories, onSave, onClose }: { item: MenuItem; cate
     }
   };
 
+  const addSupplementField = () => {
+    const current = form.supplements || [];
+    setForm({
+      ...form,
+      supplements: [...current, { name: "", price: 0 }]
+    });
+  };
+
+  const updateSupplementField = (index: number, key: 'name' | 'price', value: any) => {
+    const current = [...(form.supplements || [])];
+    current[index] = {
+      ...current[index],
+      [key]: key === 'price' ? Number(value) : value
+    };
+    setForm({ ...form, supplements: current });
+  };
+
+  const removeSupplementField = (index: number) => {
+    const current = (form.supplements || []).filter((_, i) => i !== index);
+    setForm({ ...form, supplements: current });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await onSave(form, file);
+    // Nettoyer les suppléments vides
+    const cleanedSupplements = (form.supplements || []).filter(s => s.name.trim() !== "");
+    await onSave({ ...form, supplements: cleanedSupplements }, file);
     setLoading(false);
   };
 
@@ -348,6 +377,73 @@ function ItemModal({ item, categories, onSave, onClose }: { item: MenuItem; cate
               <input type="url" value={form.image} onChange={(e) => { setForm({ ...form, image: e.target.value }); setPreview(e.target.value); }} disabled={loading} style={{ width: "100%", height: 40, background: "var(--color-bg)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 13, padding: "0 12px", outline: "none", boxSizing: "border-box" }} />
             </div>
           )}
+
+          {/* Section Suppléments */}
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 16, marginTop: 8 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <h4 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 13, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--color-fire)", margin: 0 }}>Suppléments</h4>
+              <button
+                type="button"
+                onClick={addSupplementField}
+                disabled={loading}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 4,
+                  background: "none",
+                  border: "none",
+                  color: "var(--color-smoke)",
+                  cursor: "pointer",
+                  fontSize: 11,
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  opacity: 0.8,
+                  padding: "6px 12px",
+                  borderRadius: "var(--radius-sm)",
+                  backgroundColor: "rgba(255,255,255,0.05)"
+                }}
+              >
+                <Plus size={12} /> Ajouter
+              </button>
+            </div>
+            
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 180, overflowY: "auto", paddingRight: 4 }}>
+              {(form.supplements || []).map((sup, idx) => (
+                <div key={idx} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Nom du supplément (ex: Fromage)"
+                    value={sup.name}
+                    onChange={(e) => updateSupplementField(idx, "name", e.target.value)}
+                    disabled={loading}
+                    style={{ flex: 2, height: 38, background: "var(--color-bg)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 13, padding: "0 10px", outline: "none", boxSizing: "border-box" }}
+                  />
+                  <input
+                    required
+                    type="number"
+                    placeholder="Prix"
+                    value={sup.price || ""}
+                    onChange={(e) => updateSupplementField(idx, "price", e.target.value)}
+                    disabled={loading}
+                    style={{ flex: 1, height: 38, background: "var(--color-bg)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 13, padding: "0 10px", outline: "none", boxSizing: "border-box" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeSupplementField(idx)}
+                    disabled={loading}
+                    style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", opacity: 0.8, display: "flex", alignItems: "center", justifyContent: "center", padding: 6 }}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              ))}
+              {(form.supplements || []).length === 0 && (
+                <p style={{ color: "var(--color-cream)", opacity: 0.5, fontSize: 12, margin: "4px 0 0", fontStyle: "italic" }}>Aucun supplément configuré pour ce produit.</p>
+              )}
+            </div>
+          </div>
 
           <button type="submit" disabled={loading} className="press" style={{ height: 44, background: "var(--color-fire)", color: "#0D0D0D", border: "none", borderRadius: "var(--radius-sm)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 13, textTransform: "uppercase", cursor: loading ? "wait" : "pointer", marginTop: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, opacity: loading ? 0.7 : 1 }}>
             {loading ? <><Loader2 size={16} className="animate-spin" /> Traitement...</> : "Sauvegarder"}
