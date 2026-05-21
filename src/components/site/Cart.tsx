@@ -77,7 +77,7 @@ export function CartDrawer() {
   const [isMobile, setIsMobile] = useState(false);
   const [params] = useSearchParams();
   const tableParam = params.get("table");
-  const [deliveryMethod, setDeliveryMethod] = useState<"pickup" | "delivery">("pickup");
+  const [deliveryMethod, setDeliveryMethod] = useState<"pickup" | "delivery" | null>(null);
   const [deliveryAddress, setDeliveryAddress] = useState("");
   
   // also check local storage if MenuPage saved it
@@ -100,47 +100,23 @@ export function CartDrawer() {
   if (!open) return null;
 
   const sendOrder = async () => {
-    let msg = "";
-    if (tableNumber) {
-      const { getOrders, saveOrders } = await import("@/lib/data");
-      const orderId = `ord-${Date.now()}`;
-      const newOrder = {
-        id: orderId,
-        table: tableNumber,
-        items: lines.map((l) => {
-          const sups = l.selectedSupplements && l.selectedSupplements.length > 0
-            ? ` (${l.selectedSupplements.map(s => s.name).join(", ")})`
-            : "";
-          const supsTotal = l.selectedSupplements?.reduce((sum, s) => sum + s.price, 0) || 0;
-          return {
-            name: `${l.item.name}${sups}`,
-            qty: l.qty,
-            price: l.item.price + supsTotal
-          };
-        }),
-        note: note.trim(),
-        total,
-        status: "pending" as const,
-        createdAt: Date.now(),
-      };
-      saveOrders([...getOrders(), newOrder]);
-      localStorage.setItem("mrpizza_current_order", orderId);
-      window.dispatchEvent(new Event("mrpizza_order_created"));
-      clear();
-      setOpen(false);
+    if (!deliveryMethod) {
+      alert("Veuillez sélectionner un mode de retrait : Livraison ou Retrait sur place.");
       return;
-    } else {
-      msg += "Bonjour Mr. Pizza Lomé !\n\nNOUVELLE COMMANDE :\n";
-      msg += `Type : ${deliveryMethod === "pickup" ? "À emporter (Retrait sur place)" : "Livraison"}\n`;
-      if (deliveryMethod === "delivery") {
-        if (!deliveryAddress.trim()) {
-          alert("Veuillez indiquer une adresse de livraison.");
-          return;
-        }
-        msg += `Adresse : ${deliveryAddress.trim()}\n`;
-      }
-      msg += "\n";
     }
+
+    let msg = "";
+    msg += "Bonjour Mr. Pizza Lomé !\n\nNOUVELLE COMMANDE :\n";
+    msg += `Type : ${deliveryMethod === "pickup" ? "Retrait sur place (À emporter)" : "Livraison à domicile"}\n`;
+    if (deliveryMethod === "delivery") {
+      if (!deliveryAddress.trim()) {
+        alert("Veuillez indiquer votre adresse de livraison.");
+        return;
+      }
+      msg += `Adresse : ${deliveryAddress.trim()}\n`;
+    }
+    msg += "\n";
+
     lines.forEach((l) => {
       const sups = l.selectedSupplements && l.selectedSupplements.length > 0
         ? ` (${l.selectedSupplements.map(s => s.name).join(", ")})`
@@ -366,37 +342,43 @@ export function CartDrawer() {
                 onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
               />
 
-              {!tableNumber && (
-                <div style={{ background: "rgba(255,255,255,0.02)", padding: 16, borderRadius: "var(--radius-sm)", border: "1px solid rgba(255,255,255,0.05)", marginTop: 16 }}>
-                  <h4 style={{ margin: "0 0 12px", fontFamily: "var(--font-display)", fontSize: 13, color: "var(--color-smoke)", textTransform: "uppercase" }}>Option de commande</h4>
-                  <div style={{ display: "flex", gap: 8, marginBottom: deliveryMethod === "delivery" ? 12 : 0 }}>
-                    <button
-                      onClick={() => setDeliveryMethod("pickup")}
-                      style={{ flex: 1, padding: "10px", background: deliveryMethod === "pickup" ? "rgba(255,77,28,0.1)" : "transparent", border: deliveryMethod === "pickup" ? "1px solid var(--color-fire)" : "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: deliveryMethod === "pickup" ? "var(--color-fire)" : "var(--color-cream)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, cursor: "pointer", transition: "all 200ms" }}
-                    >
-                      À emporter
-                    </button>
-                    <button
-                      onClick={() => setDeliveryMethod("delivery")}
-                      style={{ flex: 1, padding: "10px", background: deliveryMethod === "delivery" ? "rgba(255,77,28,0.1)" : "transparent", border: deliveryMethod === "delivery" ? "1px solid var(--color-fire)" : "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: deliveryMethod === "delivery" ? "var(--color-fire)" : "var(--color-cream)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, cursor: "pointer", transition: "all 200ms" }}
-                    >
-                      Livraison
-                    </button>
-                  </div>
-                  
-                  {deliveryMethod === "delivery" && (
+              <div style={{ background: "rgba(255,255,255,0.02)", padding: 16, borderRadius: "var(--radius-sm)", border: "1px solid rgba(255,255,255,0.05)", marginTop: 16 }}>
+                <h4 style={{ margin: "0 0 12px", fontFamily: "var(--font-display)", fontSize: 13, color: "var(--color-smoke)", textTransform: "uppercase" }}>Option de commande</h4>
+                <div style={{ display: "flex", gap: 8, marginBottom: deliveryMethod === "delivery" ? 12 : 0 }}>
+                  <button
+                    onClick={() => setDeliveryMethod("pickup")}
+                    style={{ flex: 1, padding: "12px 10px", background: deliveryMethod === "pickup" ? "rgba(255,77,28,0.15)" : "transparent", border: deliveryMethod === "pickup" ? "1.5px solid var(--color-fire)" : "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: deliveryMethod === "pickup" ? "var(--color-fire)" : "var(--color-cream)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, cursor: "pointer", transition: "all 200ms" }}
+                  >
+                    Retrait sur place
+                  </button>
+                  <button
+                    onClick={() => setDeliveryMethod("delivery")}
+                    style={{ flex: 1, padding: "12px 10px", background: deliveryMethod === "delivery" ? "rgba(255,77,28,0.15)" : "transparent", border: deliveryMethod === "delivery" ? "1.5px solid var(--color-fire)" : "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: deliveryMethod === "delivery" ? "var(--color-fire)" : "var(--color-cream)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, cursor: "pointer", transition: "all 200ms" }}
+                  >
+                    Livraison
+                  </button>
+                </div>
+                
+                {deliveryMethod === null && (
+                  <p style={{ margin: "8px 0 0", fontSize: 12, color: "var(--color-fire)", opacity: 0.8, fontFamily: "var(--font-body)" }}>
+                    ⚠️ Veuillez sélectionner une option pour continuer.
+                  </p>
+                )}
+                
+                {deliveryMethod === "delivery" && (
+                  <div style={{ marginTop: 12 }}>
                     <input
                       type="text"
-                      placeholder="Adresse complète (Quartier, rue...)"
+                      placeholder="Adresse complète (Quartier, rue, maison...)"
                       value={deliveryAddress}
                       onChange={(e) => setDeliveryAddress(e.target.value)}
                       style={{ width: "100%", padding: "12px", background: "var(--color-surface)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "var(--radius-sm)", color: "var(--color-smoke)", fontFamily: "var(--font-body)", fontSize: 13, outline: "none", boxSizing: "border-box" }}
                       onFocus={(e) => (e.currentTarget.style.borderColor = "var(--color-fire)")}
                       onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
                     />
-                  )}
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

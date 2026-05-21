@@ -84,19 +84,12 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
   const [data, setData] = useState(getRestaurantData);
   const cart = useCart();
   const [activeCategory, setActiveCategory] = useState("ALL");
-  const [tableNumber, setTableNumber] = useState<number | null>(initialTable ?? null);
-  const [showTableModal, setShowTableModal] = useState(scanMode && !initialTable);
-  const [tableInput, setTableInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
 
   // Listen for data changes and fetch initial async
   useEffect(() => {
-    if (initialTable) {
-      localStorage.setItem("mrpizza_table", String(initialTable));
-    }
-    
     // Fetch async from Supabase
     import("@/lib/data").then(m => {
       m.fetchRestaurantData().then(d => setData(d));
@@ -105,7 +98,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
     const handler = () => setData(getRestaurantData());
     window.addEventListener("mrpizza_data_changed", handler);
     return () => window.removeEventListener("mrpizza_data_changed", handler);
-  }, [initialTable]);
+  }, []);
 
   const filtered = data.items.filter((i) => 
     (activeCategory === "ALL" || i.category === activeCategory) &&
@@ -119,106 +112,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-bg)" }}>
-      {/* Table Modal */}
-      {showTableModal && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 300,
-            background: "rgba(0,0,0,0.8)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 24,
-          }}
-        >
-          <div
-            className="modal-in"
-            style={{
-              background: "var(--color-surface)",
-              borderRadius: "var(--radius-md)",
-              padding: "32px",
-              width: "100%",
-              maxWidth: 360,
-              textAlign: "center",
-            }}
-          >
-            <h2
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 700,
-                fontSize: "1.25rem",
-                color: "var(--color-smoke)",
-                marginTop: 0,
-                marginBottom: 8,
-              }}
-            >
-              Bienvenue !
-            </h2>
-            <p style={{ fontSize: 14, color: "var(--color-cream)", opacity: 0.7, marginBottom: 24 }}>
-              Quel est votre numéro de table ?
-            </p>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const n = parseInt(tableInput);
-                if (n > 0) {
-                  setTableNumber(n);
-                  localStorage.setItem("mrpizza_table", String(n));
-                  setShowTableModal(false);
-                }
-              }}
-            >
-              <input
-                type="number"
-                min={1}
-                max={50}
-                value={tableInput}
-                onChange={(e) => setTableInput(e.target.value)}
-                placeholder="N° de table"
-                autoFocus
-                style={{
-                  width: "100%",
-                  height: 48,
-                  background: "var(--color-bg)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "var(--radius-sm)",
-                  color: "var(--color-smoke)",
-                  fontFamily: "var(--font-display)",
-                  fontSize: 18,
-                  textAlign: "center",
-                  outline: "none",
-                  marginBottom: 16,
-                  boxSizing: "border-box",
-                }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "var(--color-fire)")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)")}
-              />
-              <button
-                type="submit"
-                className="press"
-                style={{
-                  width: "100%",
-                  height: 48,
-                  background: "var(--color-fire)",
-                  color: "#0D0D0D",
-                  border: "none",
-                  borderRadius: "var(--radius-sm)",
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 700,
-                  fontSize: 14,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                  cursor: "pointer",
-                }}
-              >
-                Valider
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Table Modal has been removed */}
 
       {/* Hero */}
       <div style={{ padding: "80px 32px 40px", textAlign: "center" }}>
@@ -244,7 +138,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
             marginTop: 12,
           }}
         >
-          {scanMode && tableNumber ? `Table ${tableNumber} — ` : ""}Choisissez, on s'occupe du reste.
+          Choisissez, on s'occupe du reste.
         </p>
       </div>
 
@@ -258,7 +152,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
           boxShadow: "0 4px 20px rgba(0,0,0,0.5)",
         }}
       >
-        {scanMode && <OrderStatusTracker />}
+        {/* Order tracking has been removed for display-only scan menu */}
         
         {/* Category Filters & Search */}
         <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "16px 32px" }}>
