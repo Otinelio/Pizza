@@ -4,8 +4,8 @@
   --color-bg: #0D0D0D;
   --color-surface: #1A1A1A;
   --color-footer: #080808;
-  --color-fire: #FF4D1C;
-  --color-fire-dark: #E03A0D;
+  --color-fire: #FFD700;
+  --color-fire-dark: #D4A800;
   --color-smoke: #F8F8F8;
   --color-cream: #F0DEB4;
 
@@ -27,7 +27,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
 }
-::selection { background: #FF4D1C; color: #0D0D0D; }
+::selection { background: #FFD700; color: #0D0D0D; }
 
 h1, h2, h3, h4 { font-family: var(--font-display); }
 
@@ -57,9 +57,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); }
   opacity: 0.22;
   pointer-events: none;
 }
-.hero-bubble-1 { width: 220px; height: 220px; top: 12%; left: -70px; background: rgba(255,77,28,0.22); }
+.hero-bubble-1 { width: 220px; height: 220px; top: 12%; left: -70px; background: rgba(255,215,0,0.22); }
 .hero-bubble-2 { width: 160px; height: 160px; top: 6%; right: 18%; background: rgba(248,222,180,0.16); }
-.hero-bubble-3 { width: 320px; height: 320px; bottom: -90px; right: -100px; background: rgba(255,77,28,0.12); }
+.hero-bubble-3 { width: 320px; height: 320px; bottom: -90px; right: -100px; background: rgba(255,215,0,0.12); }
 
 .feature-pill {
   display: inline-flex;
@@ -68,8 +68,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); }
   gap: 8px;
   padding: 10px 16px;
   border-radius: 999px;
-  background: rgba(255,77,28,0.12);
-  border: 1px solid rgba(255,77,28,0.18);
+  background: rgba(255,215,0,0.12);
+  border: 1px solid rgba(255,215,0,0.25);
   color: var(--color-cream);
   font-family: var(--font-display);
   font-weight: 700;
@@ -113,7 +113,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); }
 }
 
 /* Kitchen pulse */
-@keyframes kpulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,77,28,0.4)} 50%{box-shadow:0 0 0 8px rgba(255,77,28,0)} }
+@keyframes kpulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,0.4)} 50%{box-shadow:0 0 0 8px rgba(255,215,0,0)} }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar { width: 6px; height: 6px; }

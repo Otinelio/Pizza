@@ -31,7 +31,7 @@ export function CartFab() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        boxShadow: "0 4px 24px rgba(255,77,28,0.35)",
+        boxShadow: "0 4px 24px rgba(255,215,0,0.35)",
         right: "16px",
         bottom: "72px",
       }}
@@ -347,13 +347,13 @@ export function CartDrawer() {
                 <div style={{ display: "flex", gap: 8, marginBottom: deliveryMethod === "delivery" ? 12 : 0 }}>
                   <button
                     onClick={() => setDeliveryMethod("pickup")}
-                    style={{ flex: 1, padding: "12px 10px", background: deliveryMethod === "pickup" ? "rgba(255,77,28,0.15)" : "transparent", border: deliveryMethod === "pickup" ? "1.5px solid var(--color-fire)" : "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: deliveryMethod === "pickup" ? "var(--color-fire)" : "var(--color-cream)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, cursor: "pointer", transition: "all 200ms" }}
+                    style={{ flex: 1, padding: "12px 10px", background: deliveryMethod === "pickup" ? "rgba(255,215,0,0.15)" : "transparent", border: deliveryMethod === "pickup" ? "1.5px solid var(--color-fire)" : "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: deliveryMethod === "pickup" ? "var(--color-fire)" : "var(--color-cream)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, cursor: "pointer", transition: "all 200ms" }}
                   >
                     Retrait sur place
                   </button>
                   <button
                     onClick={() => setDeliveryMethod("delivery")}
-                    style={{ flex: 1, padding: "12px 10px", background: deliveryMethod === "delivery" ? "rgba(255,77,28,0.15)" : "transparent", border: deliveryMethod === "delivery" ? "1.5px solid var(--color-fire)" : "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: deliveryMethod === "delivery" ? "var(--color-fire)" : "var(--color-cream)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, cursor: "pointer", transition: "all 200ms" }}
+                    style={{ flex: 1, padding: "12px 10px", background: deliveryMethod === "delivery" ? "rgba(255,215,0,0.15)" : "transparent", border: deliveryMethod === "delivery" ? "1.5px solid var(--color-fire)" : "1px solid rgba(255,255,255,0.1)", borderRadius: "var(--radius-sm)", color: deliveryMethod === "delivery" ? "var(--color-fire)" : "var(--color-cream)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, cursor: "pointer", transition: "all 200ms" }}
                   >
                     Livraison
                   </button>

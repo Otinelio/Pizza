@@ -72,7 +72,7 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
         </div>
         <nav style={{ flex: 1, padding: "16px 0" }}>
           {tabs.map((t) => (
-            <button key={t.id} onClick={() => setTab(t.id)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "12px 24px", background: tab === t.id ? "rgba(255,77,28,0.1)" : "transparent", border: "none", borderLeft: tab === t.id ? "3px solid var(--color-fire)" : "3px solid transparent", color: tab === t.id ? "var(--color-fire)" : "var(--color-smoke)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", cursor: "pointer", textAlign: "left", opacity: tab === t.id ? 1 : 0.6 }}>
+            <button key={t.id} onClick={() => setTab(t.id)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "12px 24px", background: tab === t.id ? "rgba(255,215,0,0.1)" : "transparent", border: "none", borderLeft: tab === t.id ? "3px solid var(--color-fire)" : "3px solid transparent", color: tab === t.id ? "var(--color-fire)" : "var(--color-smoke)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.05em", cursor: "pointer", textAlign: "left", opacity: tab === t.id ? 1 : 0.6 }}>
               <t.icon size={16} /> {t.label}
             </button>
           ))}
@@ -514,14 +514,14 @@ function TabQR() {
               borderRadius: "var(--radius-md)",
               padding: "24px 20px",
               textAlign: "center",
-              border: "1px solid rgba(255, 77, 28, 0.15)",
+              border: "1px solid rgba(255,215,0,0.15)",
               boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
               position: "relative",
               overflow: "hidden"
             }}
           >
             {/* Glowing top line */}
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "linear-gradient(90deg, var(--color-fire) 0%, #ff883b 100%)" }} />
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: "linear-gradient(90deg, var(--color-fire) 0%, #FFE566 100%)" }} />
 
             {/* Background design accents */}
             <div style={{ position: "absolute", top: -20, left: -20, width: 60, height: 60, borderRadius: "50%", background: "var(--color-fire)", filter: "blur(40px)", opacity: 0.15, pointerEvents: "none" }} />
@@ -540,8 +540,8 @@ function TabQR() {
               padding: 16,
               borderRadius: "var(--radius-sm)",
               display: "inline-block",
-              border: "1px solid rgba(255,77,28,0.1)",
-              boxShadow: "0 4px 20px rgba(255,77,28,0.05)",
+              border: "1px solid rgba(255,215,0,0.1)",
+              boxShadow: "0 4px 20px rgba(255,215,0,0.05)",
               position: "relative"
             }}>
               <QRCodeSVG

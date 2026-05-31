@@ -279,11 +279,11 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                   style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                 />
               ) : (
-                <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, rgba(255,77,28,0.05) 0%, rgba(0,0,0,0.4) 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+                <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, rgba(255,215,0,0.05) 0%, rgba(0,0,0,0.4) 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
                   <div style={{ position: "absolute", top: -20, right: -20, opacity: 0.03 }}>
                     <CategoryIcon size={120} color="var(--color-fire)" />
                   </div>
-                  <CategoryIcon size={40} style={{ color: "var(--color-fire)", opacity: 0.4, filter: "drop-shadow(0 0 10px rgba(255,77,28,0.2))" }} />
+                  <CategoryIcon size={40} style={{ color: "var(--color-fire)", opacity: 0.4, filter: "drop-shadow(0 0 10px rgba(255,215,0,0.2))" }} />
                 </div>
               )}
             </div>
@@ -337,9 +337,9 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                           alignItems: "center",
                           gap: 4,
                           padding: "8px 12px",
-                          background: "rgba(255,77,28,0.1)",
+                          background: "rgba(255,215,0,0.1)",
                           color: "var(--color-fire)",
-                          border: "1px solid rgba(255,77,28,0.2)",
+                          border: "1px solid rgba(255,215,0,0.2)",
                           borderRadius: "var(--radius-sm)",
                           fontFamily: "var(--font-display)",
                           fontWeight: 700,
@@ -350,10 +350,10 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                           transition: "all 200ms",
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.background = "rgba(255,77,28,0.2)";
+                          e.currentTarget.style.background = "rgba(255,215,0,0.2)";
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.background = "rgba(255,77,28,0.1)";
+                          e.currentTarget.style.background = "rgba(255,215,0,0.1)";
                         }}
                       >
                         + Supplément
@@ -413,11 +413,11 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                 {selectedItem.image ? (
                   <img src={selectedItem.image} alt={selectedItem.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
-                  <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, rgba(255,77,28,0.1) 0%, rgba(0,0,0,0.5) 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+                  <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(0,0,0,0.5) 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
                      <div style={{ position: "absolute", top: -30, right: -30, opacity: 0.04 }}>
                        <ModalCategoryIcon size={200} color="var(--color-fire)" />
                      </div>
-                     <ModalCategoryIcon size={64} style={{ color: "var(--color-fire)", opacity: 0.5, filter: "drop-shadow(0 0 15px rgba(255,77,28,0.3))" }} />
+                     <ModalCategoryIcon size={64} style={{ color: "var(--color-fire)", opacity: 0.5, filter: "drop-shadow(0 0 15px rgba(255,215,0,0.3))" }} />
                   </div>
                 )}
                 <button onClick={() => setSelectedItem(null)} style={{ position: "absolute", top: 16, right: 16, background: "rgba(0,0,0,0.5)", border: "none", color: "white", width: 32, height: 32, borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", backdropFilter: "blur(4px)" }}><X size={18} /></button>
@@ -498,7 +498,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                               {selectedItem.supplements?.map((sup) => {
                                 const isSelected = line.selectedSupplements.some(s => s.name === sup.name);
                                 return (
-                                  <div key={sup.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: isSelected ? "rgba(255,77,28,0.05)" : "rgba(0,0,0,0.2)", borderRadius: "var(--radius-sm)", border: isSelected ? "1px solid rgba(255,77,28,0.2)" : "1px solid transparent", transition: "all 200ms" }}>
+                                  <div key={sup.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: isSelected ? "rgba(255,215,0,0.05)" : "rgba(0,0,0,0.2)", borderRadius: "var(--radius-sm)", border: isSelected ? "1px solid rgba(255,215,0,0.2)" : "1px solid transparent", transition: "all 200ms" }}>
                                     <div>
                                       <span style={{ fontSize: 13, color: isSelected ? "var(--color-smoke)" : "var(--color-cream)", fontWeight: isSelected ? 600 : 400 }}>{sup.name}</span>
                                       <span style={{ fontSize: 11, color: "var(--color-fire)", marginLeft: 8 }}>+{formatFCFA(sup.price)}</span>
@@ -535,7 +535,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
                         <button
                           onClick={() => { cart.add(selectedItem); }}
                           className="press"
-                          style={{ width: "100%", height: 42, background: "transparent", border: "1px dashed rgba(255,77,28,0.3)", borderRadius: "var(--radius-sm)", color: "var(--color-fire)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 12 }}
+                          style={{ width: "100%", height: 42, background: "transparent", border: "1px dashed rgba(255,215,0,0.3)", borderRadius: "var(--radius-sm)", color: "var(--color-fire)", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 12 }}
                         >
                           <Plus size={14} /> Ajouter une autre instance de ce produit
                         </button>

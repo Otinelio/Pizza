@@ -78,7 +78,7 @@ export default function HomePage() {
       >
         <div style={{ maxWidth: 760, minHeight: "100%", display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
-            <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.24em", color: "#FFB18C", background: "rgba(255,77,28,0.14)", padding: "10px 18px", borderRadius: 999 }}>
+            <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.24em", color: "#FFE066", background: "rgba(255,215,0,0.14)", padding: "10px 18px", borderRadius: 999 }}>
               RAPIDE & SIMPLE
             </span>
             <span style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--color-cream)", opacity: 0.9 }}>
@@ -210,14 +210,14 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div style={{ position: "absolute", top: "50%", right: "10%", width: 170, height: 170, borderRadius: "50%", background: "rgba(255,77,28,0.16)", filter: "blur(40px)", transform: "translateY(-50%)" }} />
+        <div style={{ position: "absolute", top: "50%", right: "10%", width: 170, height: 170, borderRadius: "50%", background: "rgba(255,215,0,0.16)", filter: "blur(40px)", transform: "translateY(-50%)" }} />
       </section>
 
       {/* ── NOS COUPS DE COEUR ──────────── */}
       <section style={{ padding: "80px 28px", maxWidth: 1150, margin: "0 auto" }}>
         <Reveal>
           <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 36 }}>
-            <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.2em", color: "#FFB18C" }}>
+            <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.2em", color: "#FFE066" }}>
               Choix du chef
             </span>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3rem)", margin: 0, color: "var(--color-smoke)", lineHeight: 1.05 }}>
@@ -254,7 +254,7 @@ export default function HomePage() {
       <section style={{ padding: "0 28px 80px", maxWidth: 1150, margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, alignItems: "center" }}>
           <div>
-            <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.2em", color: "#FFB18C" }}>
+            <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.2em", color: "#FFE066" }}>
               Simple et pertinent
             </span>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3rem)", margin: "16px 0 20px", color: "var(--color-smoke)", lineHeight: 1.05 }}>
