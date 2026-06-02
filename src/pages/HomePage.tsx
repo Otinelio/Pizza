@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowDown, MessageCircle } from "lucide-react";
 import { getRestaurantData, formatFCFA } from "@/lib/data";
 import Reveal from "@/components/site/Reveal";
+import heroImage from "@/lib/images/Pizza.jpg";
+import heroCardImage from "@/lib/images/Pizza1.jpg";
 
 /* ── Letter-drop animation helper ────── */
 function AnimatedTitle({ text }: { text: string }) {
@@ -68,7 +70,7 @@ export default function HomePage() {
           gridTemplateRows: "auto auto",
           gap: "36px",
           alignItems: "center",
-          backgroundImage: "linear-gradient(rgba(13, 13, 13, 0.72), rgba(13, 13, 13, 0.72)), url('/src/lib/images/Pizza.jpg')",
+          backgroundImage: `linear-gradient(rgba(13, 13, 13, 0.72), rgba(13, 13, 13, 0.72)), url('${heroImage}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           borderRadius: "0 0 28px 28px",
@@ -122,7 +124,7 @@ export default function HomePage() {
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 18, width: "100%" }}>
           <div style={{ width: "100%", maxWidth: 420, borderRadius: 28, overflow: "hidden", boxShadow: "0 26px 60px rgba(0,0,0,0.24)", border: "1px solid rgba(255,255,255,0.10)" }}>
             <img
-              src="/src/lib/images/Pizza1.jpg"
+              src={heroCardImage}
               alt={signatures[0]?.name || "Pizza"}
               style={{ width: "100%", aspectRatio: "4 / 3", objectFit: "cover" }}
             />

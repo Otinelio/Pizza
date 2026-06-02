@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import logo from "@/lib/images/logopizza.png";
 
 const links = [
   { to: "/", label: "Accueil" },
@@ -33,7 +34,7 @@ export default function Navbar() {
         }}
       >
         <img 
-          src="/src/lib/images/logopizza.png" 
+          src={logo} 
           alt="Mr. Pizza" 
           style={{
             height: "70px",

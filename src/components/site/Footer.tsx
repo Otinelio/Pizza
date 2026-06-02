@@ -1,6 +1,7 @@
 import { Instagram, Facebook } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getRestaurantData } from "@/lib/data";
+import logo from "@/lib/images/logopizza.png";
 
 export default function Footer() {
   const [data, setData] = useState(getRestaurantData);
@@ -35,7 +36,7 @@ export default function Footer() {
         {/* Logo + tagline */}
         <div>
           <img 
-            src="/src/lib/images/logopizza.png" 
+            src={logo} 
             alt="Mr. Pizza" 
             style={{
               height: "60px",

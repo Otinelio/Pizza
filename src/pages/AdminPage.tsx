@@ -3,6 +3,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { LogOut, LayoutDashboard, ChefHat, Info, QrCode, ToggleLeft, ToggleRight, Plus, Pencil, Trash2, X, Image as ImageIcon, Loader2, List, Search } from "lucide-react";
 import { ADMIN_PASSWORD, getRestaurantData, saveRestaurantData, formatFCFA, type RestaurantData, type MenuItem, addMenuItem, updateMenuItem, deleteMenuItem, toggleItemAvailability } from "@/lib/data";
 import { uploadMenuImage, deleteMenuImage, isSupabaseConfigured } from "@/lib/supabase";
+import logo from "@/lib/images/logopizza.png";
 
 export default function AdminPage() {
   const [auth, setAuth] = useState(false);
@@ -14,7 +15,7 @@ export default function AdminPage() {
       <div style={{ minHeight: "100vh", background: "#0D0D0D", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
         <form onSubmit={(e) => { e.preventDefault(); if (pw.trim() === ADMIN_PASSWORD) { setAuth(true); setErr(""); } else { setErr("Mot de passe incorrect"); } }} style={{ width: "100%", maxWidth: 360, textAlign: "center" }}>
           <img 
-            src="/src/lib/images/logopizza.png" 
+            src={logo} 
             alt="Mr. Pizza" 
             style={{
               height: "80px",
@@ -62,7 +63,7 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       <aside style={{ width: 240, background: "var(--color-surface)", padding: "24px 0", display: "flex", flexDirection: "column", borderRight: "1px solid rgba(255,255,255,0.05)", flexShrink: 0, position: "sticky", top: 0, height: "100vh" }}>
         <div style={{ padding: "0 24px 24px", borderBottom: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center" }}>
           <img 
-            src="/src/lib/images/logopizza.png" 
+            src={logo} 
             alt="Mr. Pizza" 
             style={{
               height: "40px",

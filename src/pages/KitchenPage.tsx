@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { LogOut, Plus, X, GripVertical } from "lucide-react";
 import { KITCHEN_PASSWORD, getRestaurantData, getOrders, saveOrders, formatFCFA, type KitchenOrder, type MenuItem } from "@/lib/data";
+import logo from "@/lib/images/logopizza.png";
 
 const COLS = [
   { status: "pending" as const, label: "EN ATTENTE", bg: "#FEF3C7" },
@@ -19,7 +20,7 @@ export default function KitchenPage() {
       <div style={{ minHeight: "100vh", background: "#0D0D0D", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
         <form onSubmit={(e) => { e.preventDefault(); if (pw.trim() === KITCHEN_PASSWORD) { setAuth(true); setErr(""); } else setErr("Mot de passe incorrect"); }} style={{ width: "100%", maxWidth: 360, textAlign: "center" }}>
           <img 
-            src="/src/lib/images/logopizza.png" 
+            src={logo} 
             alt="Mr. Pizza" 
             style={{
               height: "80px",
