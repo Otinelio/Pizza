@@ -115,7 +115,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
       {/* Table Modal has been removed */}
 
       {/* Hero */}
-      <div style={{ padding: "80px 32px 40px", textAlign: "center" }}>
+      <div style={{ padding: "clamp(40px, 8vw, 80px) clamp(16px, 4vw, 32px) 40px", textAlign: "center" }}>
         <h1
           style={{
             fontFamily: "var(--font-display)",
@@ -155,7 +155,7 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
         {/* Order tracking has been removed for display-only scan menu */}
         
         {/* Category Filters & Search */}
-        <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "16px 32px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "16px clamp(16px, 4vw, 32px)" }}>
           <div
             style={{
               display: "flex",
@@ -212,9 +212,9 @@ export default function MenuPage({ scanMode = false, initialTable }: MenuPagePro
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
           gap: 24,
-          padding: "0 32px 80px",
+          padding: "0 clamp(16px, 4vw, 32px) 80px",
           maxWidth: 1200,
           margin: "0 auto",
         }}

@@ -20,7 +20,7 @@ export default function Footer() {
     <footer
       style={{
         background: "var(--color-footer)",
-        padding: "64px 32px 32px",
+        padding: "clamp(40px, 8vw, 64px) clamp(16px, 4vw, 32px) 32px",
         borderTop: "1px solid rgba(255,255,255,0.05)",
       }}
     >
@@ -29,7 +29,7 @@ export default function Footer() {
           maxWidth: "1200px",
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
           gap: "48px",
         }}
       >

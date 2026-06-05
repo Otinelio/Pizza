@@ -62,13 +62,13 @@ export default function HomePage() {
     <div>
       {/* ── HERO ─────────────────────────── */}
       <section
+        className="flex flex-col lg:grid"
         style={{
           minHeight: "calc(100svh - 140px)",
-          padding: "48px 28px",
-          display: "grid",
-          gridTemplateColumns: "1.1fr minmax(320px, 420px)",
+          padding: "clamp(32px, 5vw, 48px) clamp(16px, 4vw, 28px)",
+          gridTemplateColumns: "1.1fr minmax(300px, 420px)",
           gridTemplateRows: "auto auto",
-          gap: "36px",
+          gap: "clamp(24px, 4vw, 36px)",
           alignItems: "center",
           backgroundImage: `linear-gradient(rgba(13, 13, 13, 0.72), rgba(13, 13, 13, 0.72)), url('${heroImage}')`,
           backgroundSize: "cover",
@@ -138,7 +138,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 14, width: "100%", maxWidth: 420 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 14, width: "100%", maxWidth: 420 }}>
             {signatures.slice(1, 3).map((item: any) => (
               <div key={item.id} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 22, padding: 18 }}>
                 <p style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 13, margin: 0, color: "var(--color-smoke)", textTransform: "uppercase" }}>{item.name}</p>
@@ -216,7 +216,7 @@ export default function HomePage() {
       </section>
 
       {/* ── NOS COUPS DE COEUR ──────────── */}
-      <section style={{ padding: "80px 28px", maxWidth: 1150, margin: "0 auto" }}>
+      <section style={{ padding: "clamp(40px, 8vw, 80px) clamp(16px, 4vw, 28px)", maxWidth: 1150, margin: "0 auto" }}>
         <Reveal>
           <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 36 }}>
             <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.2em", color: "#FFE066" }}>
@@ -253,8 +253,8 @@ export default function HomePage() {
       </section>
 
       {/* ── POURQUOI NOUS ─────────────── */}
-      <section style={{ padding: "0 28px 80px", maxWidth: 1150, margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, alignItems: "center" }}>
+      <section style={{ padding: "0 clamp(16px, 4vw, 28px) 80px", maxWidth: 1150, margin: "0 auto" }}>
+        <div className="flex flex-col md:grid" style={{ gridTemplateColumns: "1fr 1fr", gap: 24, alignItems: "center" }}>
           <div>
             <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.2em", color: "#FFE066" }}>
               Simple et pertinent
